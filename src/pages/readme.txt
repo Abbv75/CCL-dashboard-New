@@ -1,0 +1,1 @@
+contient les composants majeur des pages. Chacun avec ses dossiers
