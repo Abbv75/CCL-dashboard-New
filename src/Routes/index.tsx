@@ -2,17 +2,15 @@ import { Routes, Route } from 'react-router-dom';
 import { PAGE_PATH } from '../constant';
 import { useContext } from 'react';
 import { AppContext } from '../providers/AppContext';
-import CustomForm from '../components/CustomForm';
-// import LoginPage from '../pages/Login';
 
 const Router = () => {
-  const { currentUser } = useContext(AppContext);
+  // const { currentUser } = useContext(AppContext);
 
   return (
     <Routes>
-      <Route path="/" element={currentUser ? <>accueil</> : <CustomForm />} />
+      <Route path="/" element={/*currentUser*/ true ? <>accueil</> : < >Login</>} />
 
-      {PAGE_PATH.filter(({ isPublic }) => isPublic || currentUser)
+      {PAGE_PATH.filter(({ isPublic }) => isPublic /*|| currentUser*/)
         .map((path, index) => (
           <Route
             key={index}
