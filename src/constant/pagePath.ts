@@ -6,7 +6,8 @@ export default [
         href: '/connexion',
         icon: faLock,
         component: undefined,
-        isPublic: false
+        isPublic: false,
+        toHide : true
     },
     {
         label: 'Accueil',
