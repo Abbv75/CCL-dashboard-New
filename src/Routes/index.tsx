@@ -4,21 +4,22 @@ import { useContext } from 'react';
 import { AppContext } from '../providers/AppContext';
 import Connexion from '../pages/Connexion';
 import Dashboard from '../pages/Dashboard';
+import Layout from '../components/Layout';
 
 const Router = () => {
   const { currentUser } = useContext(AppContext);
 
   return (
     <Routes>
-      <Route path="/*" element={currentUser ? <Dashboard /> : <Connexion />} />
+      <Route path="/*" element={currentUser ? <Layout children={<Dashboard />} /> : <Connexion />} />
 
-      {/* {PAGE_PATH.filter(({ isPublic }) => isPublic || currentUser).map((path, index) => (
+      {PAGE_PATH.filter(({ isPublic }) => isPublic || currentUser).map((path, index) => (
         <Route
           key={index}
           path={path.href}
-          Component={path.component}
+          element={<Layout children={path.component} />}
         />
-      ))} */}
+      ))}
     </Routes>
   );
 };
