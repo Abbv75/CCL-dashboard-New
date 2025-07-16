@@ -2,7 +2,7 @@ import { Avatar, ButtonGroup, Card, IconButton, Stack, Typography } from '@mui/j
 import { CardMedia } from '@mui/material'
 import { IMAGES } from '../../constant'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import { faLock, faUserAstronaut } from '@fortawesome/free-solid-svg-icons'
+import { faGear, faUserAstronaut } from '@fortawesome/free-solid-svg-icons'
 
 const Header = () => {
     return (
@@ -13,7 +13,7 @@ const Header = () => {
                 >CCL</Typography>
                 <ButtonGroup variant='plain' >
                     <IconButton children={<FontAwesomeIcon icon={faUserAstronaut} />} />
-                    <IconButton children={<FontAwesomeIcon icon={faLock} />} />
+                    <IconButton children={<FontAwesomeIcon icon={faGear} />} />
                 </ButtonGroup>
             </Stack>
         </Card>
