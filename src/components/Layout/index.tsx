@@ -2,7 +2,7 @@ import { Box, Stack } from '@mui/joy'
 import Header from '../Header'
 import Navbar from '../Navbar'
 
-const Layout = ({ children }: { children?: JSX.Element }) => {
+const Layout = ({ children }: { children?: any }) => {
     return (
         <Stack height={"100vh"} >
             <Header />

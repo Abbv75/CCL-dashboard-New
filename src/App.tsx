@@ -5,6 +5,7 @@ import { ToastContainer } from 'react-toastify'
 import React, { useCallback, useEffect, useState } from 'react'
 import { LOADING_STATE_T, USER_T } from './types'
 import { Skeleton, Typography } from '@mui/joy'
+import Layout from './components/Layout'
 
 const App = () => {
   const [currentUser, setcurrentUser] = useState(undefined as undefined | USER_T);
@@ -37,7 +38,7 @@ const App = () => {
         <ToastContainer />
 
         <Skeleton loading={!!loadingUserState} >
-          <Router />
+          <Layout children={<Router />} />
         </Skeleton>
 
       </BrowserRouter>

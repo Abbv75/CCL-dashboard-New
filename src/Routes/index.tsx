@@ -17,7 +17,7 @@ const Router = () => {
         <Route
           key={index}
           path={path.href}
-          element={<Layout children={path.component} />}
+          Component={path.component}
         />
       ))}
     </Routes>

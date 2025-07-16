@@ -1,4 +1,5 @@
-import { faHouseLaptop, faLock } from "@fortawesome/free-solid-svg-icons";
+import { faHouseLaptop, faLock, faUsersGear } from "@fortawesome/free-solid-svg-icons";
+import Dashboard from "../pages/Dashboard";
 
 export default [
     {
@@ -7,13 +8,20 @@ export default [
         icon: faLock,
         component: undefined,
         isPublic: false,
-        toHide : true
+        toHide: true
     },
     {
         label: 'Accueil',
         href: '/accueil',
         icon: faHouseLaptop,
-        component: undefined,
+        component: Dashboard,
+        isPublic: false
+    },
+    {
+        label: 'Gestion des utilisateurs',
+        href: '/accueil',
+        icon: faUsersGear,
+        component: Dashboard,
         isPublic: false
     },
 ]
