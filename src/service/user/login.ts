@@ -1,9 +1,9 @@
 import { axiosInstance } from "../../constant";
 import { USER_T } from "../../types";
 
-export default async (login: string, password: string) => {
+export default async (login: string, motDePasse: string) => {
     try {
-        const { data } = await axiosInstance.post('/auth/login', { login, password });
+        const { data } = await axiosInstance.post('/auth/login', { login, motDePasse });
 
         localStorage.setItem('currentUser', JSON.stringify(data.data));
 
