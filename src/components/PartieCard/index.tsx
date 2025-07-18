@@ -1,8 +1,6 @@
-import { faArrowRight, faGamepad, faPhoneAlt, faTimesCircle } from '@fortawesome/free-solid-svg-icons'
+import { faArrowRight, faGamepad, faTimesCircle } from '@fortawesome/free-solid-svg-icons'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import { Avatar, Button, ButtonGroup, Card, Chip, Stack, Tooltip, Typography } from '@mui/joy'
-import React from 'react'
-import { Link } from 'react-router-dom'
+import { Avatar, Button, ButtonGroup, Card, Stack, Typography } from '@mui/joy'
 import { PARTIE_T } from '../../types'
 
 const PartieCard = ({ partie }: { partie: PARTIE_T }) => {
@@ -16,23 +14,7 @@ const PartieCard = ({ partie }: { partie: PARTIE_T }) => {
                 <Stack flex={1} >
                     <Stack direction='row' justifyContent='space-between' gap={1} alignItems='center'>
                         <Typography level='title-md'>{partie.dateHeure}</Typography>
-
-                        {partie.status && (
-                            <Chip color={partie.status.id == 'S02' ? 'primary'
-                                : partie.status.id == 'S03' ? 'primary'
-                                    : partie.status.id == 'S04' ? 'danger'
-                                        : 'neutral'
-                            } >{partie.status.nom}</Chip>
-                        )}
-
                     </Stack>
-                    <Typography level='body-sm'>
-                        Cette partie contient {partie?.participants?.length} joueurs et a été gagnée par
-                        {` `}<strong>Player1</strong>. {` `}
-                        <Tooltip title="4545">
-                            <Link to="tel:45454" >Cliquez pour l'appeler <FontAwesomeIcon icon={faPhoneAlt} /></Link>
-                        </Tooltip>
-                    </Typography>
                 </Stack>
             </Stack>
             <ButtonGroup>
