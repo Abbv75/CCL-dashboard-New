@@ -1,0 +1,1 @@
+export {  deletePartie } from "./delete"
