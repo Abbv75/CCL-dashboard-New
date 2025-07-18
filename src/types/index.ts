@@ -33,3 +33,22 @@ export type USER_T = {
   role?: ROLE_T;
   contact?: CONTACT_T;
 };
+
+export interface STATUS_T {
+  nom: string;
+  id: number;
+  description?: string;
+}
+
+export type TOURNOI_T = {
+  id: string;
+  nom: string;
+  frais_inscription?: number;
+  id_status?: number;
+  status: STATUS_T;
+  date_debut?: string;
+  montant_a_gagner?: number;
+  nb_max_participants?: number;
+  createdAt?: string;
+  updatedAt?: string;
+};

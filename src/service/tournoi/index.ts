@@ -1,0 +1,1 @@
+export { getAll as getAllTournoi } from "./getAll"
