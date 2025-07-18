@@ -5,7 +5,6 @@ import Tournoi from "../pages/Tournoi";
 import SelectedTournoi from "../pages/SelectedTournoi";
 
 export default [
-
     {
         label: 'Accueil',
         href: '/accueil',
@@ -29,7 +28,7 @@ export default [
     },
     {
         label: 'Tournois selectionné',
-        href: '/tournoi-selectionne/:tournoiId',
+        href: '/tournoi-selectionne/:idTournoi',
         icon: faUserClock,
         component: SelectedTournoi,
         isPublic: false,

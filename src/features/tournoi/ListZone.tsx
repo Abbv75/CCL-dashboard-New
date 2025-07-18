@@ -1,7 +1,7 @@
 import { useContext } from 'react';
 import { Stack } from '@mui/joy';
-import { TournoiContext } from '../../providers/TournoiContext';
 import TournoiCard from '../../components/TournoiCard';
+import { TournoiContext } from '../../providers/TournoiContext';
 
 const ListZone = () => {
     const { tournoiList } = useContext(TournoiContext);
