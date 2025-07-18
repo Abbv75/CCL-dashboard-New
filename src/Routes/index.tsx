@@ -3,7 +3,6 @@ import { PAGE_PATH } from '../constant';
 import { useContext } from 'react';
 import { AppContext } from '../providers/AppContext';
 import Connexion from '../pages/Connexion';
-import Dashboard from '../pages/Dashboard';
 import Layout from '../components/Layout';
 
 const Router = () => {
