@@ -8,6 +8,7 @@ import { SelectedTournoiContext } from '../../providers/SelectedTournoiContext'
 import { Link, useParams } from 'react-router-dom'
 import ListZone from '../../features/SelectedTournoi/ListZone'
 import AddParticipantZone from '../../features/SelectedTournoi/AddParticipantZone'
+import PartieList from '../../features/SelectedTournoi/PartieList'
 
 const SelectedTournoi = () => {
     const { idTournoi } = useParams();
@@ -45,7 +46,7 @@ const SelectedTournoi = () => {
                 <Divider sx={{ width: 100 }} />
 
                 <Stack mt={5} gap={5} >
-                    <Tabs defaultValue={0} sx={{ bgcolor: 'transparent' }}>
+                    <Tabs defaultValue={1} sx={{ bgcolor: 'transparent' }}>
                         <TabList
                             disableUnderline
                             sx={{
@@ -82,6 +83,18 @@ const SelectedTournoi = () => {
                                 <AddParticipantZone />
                             </Stack>
                             <ListZone />
+                        </TabPanel>
+                        <TabPanel
+                            value={1}
+                            sx={{ px: 0, gap: 2, display: 'flex', flexDirection: 'column', }}
+                        >
+                            <Stack direction={"row"} gap={1} >
+                                <Input
+                                    sx={{ width: 300 }}
+                                    endDecorator={<FontAwesomeIcon icon={faSearch} />}
+                                />
+                            </Stack>
+                            <PartieList />
                         </TabPanel>
                     </Tabs>
                 </Stack>

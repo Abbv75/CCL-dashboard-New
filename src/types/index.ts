@@ -41,7 +41,7 @@ export interface STATUS_T {
 }
 
 export interface PARTIE_T {
-  dateHeure: Date;
+  dateHeure: string;
   id: number;
   description?: string;
   id_gagnant?: string;
