@@ -13,6 +13,8 @@ const ListZone = () => {
 
     const handleDelete = async (id: string) => {
         try {
+            if (!window.confirm("Voulez-vous vraiment supprimer cet utilisateur ?")) return;
+            
             const res = await deleteUser(id);
             if (!res) {
                 toast.error("Suppression de l'utilisateur a échoué");
