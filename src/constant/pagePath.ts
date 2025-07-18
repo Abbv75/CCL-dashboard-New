@@ -1,7 +1,8 @@
-import { faGamepad, faHouseLaptop, faLock, faUsersGear } from "@fortawesome/free-solid-svg-icons";
+import { faGamepad, faHouseLaptop, faLock, faUserClock, faUsersGear } from "@fortawesome/free-solid-svg-icons";
 import Dashboard from "../pages/Dashboard";
 import User from "../pages/User";
 import Tournoi from "../pages/Tournoi";
+import SelectedTournoi from "../pages/SelectedTournoi";
 
 export default [
 
@@ -25,6 +26,14 @@ export default [
         icon: faGamepad,
         component: Tournoi,
         isPublic: false
+    },
+    {
+        label: 'Tournois selectionné',
+        href: '/tournoi-selectionne/:tournoiId',
+        icon: faUserClock,
+        component: SelectedTournoi,
+        isPublic: false,
+        toHide: true
     },
     {
         label: 'Connexion',
