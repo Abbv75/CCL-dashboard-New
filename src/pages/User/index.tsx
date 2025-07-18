@@ -11,7 +11,7 @@ import ListZone from '../../features/User/ListZone'
 const User = () => {
     const [roleList, setroleList] = useState([] as ROLE_T[]);
     const [userList, setuserList] = useState([] as USER_T[]);
-    const [loadingState, setloadingState] = useState("Chargement échoué." as LOADING_STATE_T);
+    const [loadingState, setloadingState] = useState("En cours de chargement." as LOADING_STATE_T);
 
     const loadRole = useCallback(async () => {
         const res = await getAllRole();
