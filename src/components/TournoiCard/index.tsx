@@ -1,11 +1,41 @@
 import { faArrowRight, faCalendarCheck, faHandHoldingDollar, faMoneyCheck, faTimesCircle } from '@fortawesome/free-solid-svg-icons'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { Button, ButtonGroup, Card, Chip, Divider, Stack, Typography } from '@mui/joy'
-import { TOURNOI_T } from '../../types'
+import { LOADING_STATE_T, TOURNOI_T } from '../../types'
 import { useNavigate } from 'react-router-dom'
+import { useContext, useState } from 'react'
+import { deleteTournoi } from '../../service/tournoi'
+import { toast } from 'react-toastify'
+import { TournoiContext } from '../../providers/TournoiContext'
 
 const TournoiCard = ({ tournoi }: { tournoi: TOURNOI_T }) => {
     const navigate = useNavigate();
+    const { settournoiList } = useContext(TournoiContext);
+
+    const [deleteLoadingState, setdeleteLoadingState] = useState(null as LOADING_STATE_T)
+
+    const handleDelete = async () => {
+        try {
+            if (!window.confirm("Voulez-vous vraiment supprimer ce tournoi ?") || !tournoi) return;
+
+            setdeleteLoadingState("En cours de chargement.");
+
+            const res = await deleteTournoi(tournoi.id);
+            if (!res) {
+                toast.error("Suppression du tournoi a échoué");
+                return;
+            }
+            toast.success("Tournoi supprimé avec succès");
+            
+            settournoiList((prevList) => prevList.filter(t => t.id !== tournoi.id));
+
+        } catch (error) {
+            console.error("Error deleting tournoi:", error);
+            toast.error("Suppression du tournois a échoué");
+        } finally {
+            setdeleteLoadingState(null);
+        }
+    }
 
     return (
         <Card sx={{ p: 1 }} >
@@ -62,6 +92,8 @@ const TournoiCard = ({ tournoi }: { tournoi: TOURNOI_T }) => {
                 <Button
                     color='danger'
                     endDecorator={<FontAwesomeIcon icon={faTimesCircle} />}
+                    loading={!!deleteLoadingState}
+                    onClick={handleDelete}
                 >Supprimer</Button>
             </ButtonGroup>
         </Card>
