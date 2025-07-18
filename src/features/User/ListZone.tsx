@@ -1,7 +1,7 @@
 import { useContext } from 'react'
 import CustomTable from '../../components/CustomTable'
 import { UserContext } from '../../providers/UserContext'
-import { ButtonGroup, IconButton, Tooltip } from '@mui/joy';
+import { ButtonGroup, IconButton, LinearProgress, Tooltip } from '@mui/joy';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faEnvelopeOpen, faFeather, faPhoneAlt, faTrashArrowUp } from '@fortawesome/free-solid-svg-icons';
 import { faWhatsapp } from '@fortawesome/free-brands-svg-icons';
@@ -9,12 +9,12 @@ import { toast } from 'react-toastify';
 import { deleteUser } from '../../service/user';
 
 const ListZone = () => {
-    const { userList, loadUser } = useContext(UserContext);
+    const { userList, loadUser, loadingState } = useContext(UserContext);
 
     const handleDelete = async (id: string) => {
         try {
             if (!window.confirm("Voulez-vous vraiment supprimer cet utilisateur ?")) return;
-            
+
             const res = await deleteUser(id);
             if (!res) {
                 toast.error("Suppression de l'utilisateur a échoué");
@@ -26,6 +26,10 @@ const ListZone = () => {
             console.error("Error deleting user:", error);
             toast.error("Suppression de l'utilisateur a échoué");
         }
+    }
+
+    if (loadingState) {
+        return <LinearProgress />
     }
 
     return (

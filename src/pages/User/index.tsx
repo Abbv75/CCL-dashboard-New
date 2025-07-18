@@ -2,7 +2,7 @@ import { faSearch } from '@fortawesome/free-solid-svg-icons'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { Divider, Input, Option, Select, Stack, Typography } from '@mui/joy'
 import { useCallback, useEffect, useState } from 'react'
-import { ROLE_T, USER_T } from '../../types'
+import { LOADING_STATE_T, ROLE_T, USER_T } from '../../types'
 import { getAllRole } from '../../service/role'
 import { getAllUser } from '../../service/user'
 import { UserContext } from '../../providers/UserContext'
@@ -11,6 +11,7 @@ import ListZone from '../../features/User/ListZone'
 const User = () => {
     const [roleList, setroleList] = useState([] as ROLE_T[]);
     const [userList, setuserList] = useState([] as USER_T[]);
+    const [loadingState, setloadingState] = useState("Chargement échoué." as LOADING_STATE_T);
 
     const loadRole = useCallback(async () => {
         const res = await getAllRole();
@@ -19,9 +20,16 @@ const User = () => {
     }, []);
 
     const loadUser = useCallback(async () => {
-        const res = await getAllUser();
-        if (!res) return;
-        setuserList(res);
+        try {
+            setloadingState("En cours de chargement.");
+            const res = await getAllUser();
+            if (!res) return;
+            setuserList(res);
+        } catch (error) {
+            console.error("Error loading users:", error);
+        } finally {
+            setloadingState(null);
+        }
     }, []);
 
     useEffect(() => {
@@ -34,7 +42,8 @@ const User = () => {
         <UserContext.Provider value={{
             userList,
             setuserList,
-            loadUser
+            loadUser,
+            loadingState
         }} >
 
             <Stack>
