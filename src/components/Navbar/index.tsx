@@ -3,11 +3,8 @@ import { Link, useLocation } from 'react-router-dom'
 import { PAGE_PATH } from '../../constant'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faArrowLeft, faLock } from '@fortawesome/free-solid-svg-icons'
-import { useState } from 'react'
-import { Collapse } from '@mui/material'
 
 const Navbar = () => {
-    const [isOpen, setisOpen] = useState(true)
     const { pathname } = useLocation();
 
     return (

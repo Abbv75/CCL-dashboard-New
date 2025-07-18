@@ -1,7 +1,7 @@
 import { axiosInstance } from "../../constant";
 import { USER_T } from "../../types";
 
-export default async (login: string, motDePasse: string) => {
+export const login = async (login: string, motDePasse: string) => {
     try {
         const { data } = await axiosInstance.post('/auth/login', { login, motDePasse });
 

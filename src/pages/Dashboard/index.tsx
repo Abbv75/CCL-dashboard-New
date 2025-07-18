@@ -1,8 +1,11 @@
+import { Stack, Typography } from '@mui/joy'
 import React from 'react'
 
 const Dashboard = () => {
     return (
-        <div>Dashboard12</div>
+        <Stack>
+            <Typography>Dashboard</Typography>
+        </Stack>
     )
 }
 

@@ -1,6 +1,5 @@
 import React, { useContext, useState } from 'react';
 import { Button, Card, FormControl, FormLabel, Grid, Input, Stack } from '@mui/joy';
-import { loginUser } from '../../service/user';
 import { CardMedia } from '@mui/material';
 import { IMAGES } from '../../constant';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
@@ -9,6 +8,7 @@ import { LOADING_STATE_T } from '../../types';
 import { toast } from 'react-toastify';
 import { useNavigate } from "react-router-dom";
 import { AppContext } from '../../providers/AppContext';
+import { loginUser } from '../../service/user';
 
 export default function Connexion() {
     const { setcurrentUser } = useContext(AppContext);
