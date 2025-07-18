@@ -1,14 +1,24 @@
 import { faArrowRight, faCalendarCheck, faHandHoldingDollar, faMoneyCheck, faTimesCircle } from '@fortawesome/free-solid-svg-icons'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import { Button, ButtonGroup, Card, Divider, Stack, Typography } from '@mui/joy'
+import { Button, ButtonGroup, Card, Chip, Divider, Stack, Typography } from '@mui/joy'
 import { TOURNOI_T } from '../../types'
 import { useNavigate } from 'react-router-dom'
 
 const TournoiCard = ({ tournoi }: { tournoi: TOURNOI_T }) => {
     const navigate = useNavigate();
+
     return (
         <Card sx={{ p: 1 }} >
-            <Typography level='h4'>{tournoi.nom}</Typography>
+            <Stack direction='row' gap={2} justifyContent='space-between' alignItems='center' >
+                <Typography level='title-sm'>{tournoi.nom}</Typography>
+                {tournoi.status && (
+                    <Chip color={tournoi.status.id == 'S02' ? 'primary'
+                        : tournoi.status.id == 'S03' ? 'primary'
+                            : tournoi.status.id == 'S04' ? 'danger'
+                                : 'neutral'
+                    } >{tournoi.status.nom}</Chip>
+                )}
+            </Stack>
 
             <Divider />
 

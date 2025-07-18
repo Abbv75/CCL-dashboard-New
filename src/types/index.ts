@@ -36,7 +36,7 @@ export type USER_T = {
 
 export interface STATUS_T {
   nom: string;
-  id: number;
+  id: string;
   description?: string;
 }
 
