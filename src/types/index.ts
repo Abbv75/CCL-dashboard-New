@@ -40,15 +40,28 @@ export interface STATUS_T {
   description?: string;
 }
 
+export interface PARTIE_T {
+  dateHeure: Date;
+  id: number;
+  description?: string;
+  id_gagnant?: string;
+  id_tournoi: string;
+  id_status?: number;
+  status?: STATUS_T;
+  participants?: USER_T[];
+}
+
 export type TOURNOI_T = {
   id: string;
   nom: string;
   frais_inscription?: number;
   id_status?: number;
-  status: STATUS_T;
+  status?: STATUS_T;
   date_debut?: string;
   montant_a_gagner?: number;
   nb_max_participants?: number;
   createdAt?: string;
   updatedAt?: string;
+  participants?: USER_T[];
+  parties?: PARTIE_T[];
 };
