@@ -5,9 +5,26 @@ import { ButtonGroup, IconButton, Tooltip } from '@mui/joy';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faEnvelopeOpen, faFeather, faPhoneAlt, faTrashArrowUp } from '@fortawesome/free-solid-svg-icons';
 import { faWhatsapp } from '@fortawesome/free-brands-svg-icons';
+import { toast } from 'react-toastify';
+import { deleteUser } from '../../service/user';
 
 const ListZone = () => {
-    const { userList } = useContext(UserContext);
+    const { userList, loadUser } = useContext(UserContext);
+
+    const handleDelete = async (id: string) => {
+        try {
+            const res = await deleteUser(id);
+            if (!res) {
+                toast.error("Suppression de l'utilisateur a échoué");
+                return;
+            }
+            toast.success("Utilisateur supprimé avec succès");
+            await loadUser();
+        } catch (error) {
+            console.error("Error deleting user:", error);
+            toast.error("Suppression de l'utilisateur a échoué");
+        }
+    }
 
     return (
         <CustomTable
@@ -52,7 +69,11 @@ const ListZone = () => {
                             <IconButton children={<FontAwesomeIcon icon={faFeather} />} />
                         </Tooltip>
                         <Tooltip title={`Supprimeer`} color='danger' >
-                            <IconButton color='danger' children={<FontAwesomeIcon icon={faTrashArrowUp} />} />
+                            <IconButton
+                                color='danger'
+                                children={<FontAwesomeIcon icon={faTrashArrowUp} />}
+                                onClick={() => handleDelete(value.id)}
+                            />
                         </Tooltip>
                     </ButtonGroup>
                 )

@@ -2,10 +2,12 @@ import { faArrowRight, faCalendarCheck, faHandHoldingDollar, faMoneyCheck, faTim
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { Button, ButtonGroup, Card, Divider, Stack, Typography } from '@mui/joy'
 import { TOURNOI_T } from '../../types'
+import { useNavigate } from 'react-router-dom'
 
 const TournoiCard = ({ tournoi }: { tournoi: TOURNOI_T }) => {
+    const navigate = useNavigate();
     return (
-        <Card sx={{ p: 1}} >
+        <Card sx={{ p: 1 }} >
             <Typography level='h4'>{tournoi.nom}</Typography>
 
             <Divider />
@@ -40,6 +42,9 @@ const TournoiCard = ({ tournoi }: { tournoi: TOURNOI_T }) => {
                     color='primary'
                     variant='solid'
                     endDecorator={<FontAwesomeIcon icon={faArrowRight} />}
+                    onClick={() => {
+                        navigate(`/tournoi-selectionne/${tournoi.id}`);
+                    }}
                 >Gerer</Button>
                 <Button
                     color='neutral'

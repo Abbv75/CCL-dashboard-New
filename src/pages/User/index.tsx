@@ -33,7 +33,8 @@ const User = () => {
     return (
         <UserContext.Provider value={{
             userList,
-            setuserList
+            setuserList,
+            loadUser
         }} >
 
             <Stack>
