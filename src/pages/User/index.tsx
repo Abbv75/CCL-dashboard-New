@@ -1,17 +1,20 @@
 import { faSearch } from '@fortawesome/free-solid-svg-icons'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import { Divider, Input, Option, Select, Stack, Typography } from '@mui/joy'
-import { useCallback, useEffect, useState } from 'react'
+import { Button, Divider, Input, Option, Select, Stack, Typography } from '@mui/joy'
+import { useCallback, useEffect, useMemo, useState } from 'react'
 import { LOADING_STATE_T, ROLE_T, USER_T } from '../../types'
 import { getAllRole } from '../../service/role'
 import { getAllUser } from '../../service/user'
 import { UserContext } from '../../providers/UserContext'
 import ListZone from '../../features/User/ListZone'
+import AddUser from '../../features/User/AddUser'
 
 const User = () => {
     const [roleList, setroleList] = useState([] as ROLE_T[]);
     const [userList, setuserList] = useState([] as USER_T[]);
     const [loadingState, setloadingState] = useState("En cours de chargement." as LOADING_STATE_T);
+    const [selectedRole, setselectedRole] = useState(null as string | null);
+    const [searchValue, setsearchValue] = useState(undefined as string | undefined);
 
     const loadRole = useCallback(async () => {
         const res = await getAllRole();
@@ -32,15 +35,29 @@ const User = () => {
         }
     }, []);
 
+    const filterUser = useMemo(() => {
+        return userList.filter(user => {
+            const matchesRole = selectedRole ? user.id_role === selectedRole : true;
+            const matchesSearch = searchValue ?
+                user.nomComplet.toLowerCase().includes(searchValue.toLowerCase()) ||
+                user.login.toLowerCase().includes(searchValue.toLowerCase()) ||
+                (user.contact?.telephone && user.contact.telephone.includes(searchValue)) ||
+                (user.contact?.email && user.contact.email.includes(searchValue)) : true;
+
+            return matchesRole && matchesSearch;
+        });
+
+    }, [userList, selectedRole, searchValue]);
+
     useEffect(() => {
         loadRole();
         loadUser();
-    }, [])
+    }, []);
 
 
     return (
         <UserContext.Provider value={{
-            userList,
+            userList: filterUser,
             setuserList,
             loadUser,
             loadingState
@@ -52,20 +69,32 @@ const User = () => {
                 <Divider sx={{ width: 100 }} />
 
                 <Stack mt={5} >
-                    <Stack direction={"row"} gap={1} >
-                        <Input
-                            sx={{ width: 300 }}
-                            endDecorator={<FontAwesomeIcon icon={faSearch} />}
-                        />
+                    <Stack direction={"row"} gap={2} justifyContent={"space-between"} alignItems={"center"} >
+                        <Stack direction={"row"} gap={1} >
+                            <Input
+                                sx={{ width: 300 }}
+                                endDecorator={<FontAwesomeIcon icon={faSearch} />}
+                                placeholder="ID, nom, login, numero ou email"
+                                value={searchValue}
+                                onChange={({ target }) => setsearchValue(target.value)}
+                            />
 
-                        <Select defaultValue={null} >
-                            <Option value={null}>Tout</Option>
+                            <Select
+                                defaultValue={selectedRole}
+                                onChange={(e, value) => setselectedRole(value)}
+                            >
+                                <Option value={null}>Tout</Option>
 
-                            {roleList && roleList.map((value, index) => (
-                                <Option value={value.id}>{value.nom}</Option>
-                            ))}
-                        </Select>
+                                {roleList && roleList.map((value, index) => (
+                                    <Option value={value.id}>{value.nom}</Option>
+                                ))}
+                            </Select>
+                        </Stack>
+
+                        <Button>Ajouter</Button>
                     </Stack>
+
+                    <AddUser />
 
                     <ListZone />
                 </Stack>
