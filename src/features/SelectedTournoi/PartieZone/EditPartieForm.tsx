@@ -60,6 +60,7 @@ const EditPartieForm = () => {
                         name: 'dateHeure',
                         label: 'Date et Heure',
                         type: 'datetime-local',
+                        defaultValue: new Date().toISOString().slice(0, 16),
                         required: true,
                     }, {
                         name: 'id_gagnant',
@@ -71,12 +72,14 @@ const EditPartieForm = () => {
                         name: 'id_status',
                         label: 'Statut',
                         type: 'select',
+                        defaultValue: statusList[0].id,
+                        required: true,
                         options: statusList.map(status => ({ value: status.id, label: status.nom })),
                     },]}
                     treatmentFonction={onSubmit as any}
                     submitButtonText="Valider"
                     cancelButtonText="Annuler"
-                    initialData={undefined}
+                    initialData={partieToEdit}
                     onCancel={() => { setisOpen(false) }}
                     onSubmitSuccess={(data) => {
                         if (data) {

@@ -8,7 +8,7 @@ import { SelectedTournoiContext } from '../../providers/SelectedTournoiContext'
 import { toast } from 'react-toastify'
 
 const PartieCard = ({ partie }: { partie: PARTIE_T }) => {
-    const { tournoi, settournoi } = useContext(SelectedTournoiContext);
+    const { tournoi, settournoi, setpartieToEdit } = useContext(SelectedTournoiContext);
     const [deleteLoadingState, setdeleteLoadingState] = useState(null as LOADING_STATE_T)
 
     const handleDelete = async () => {
@@ -56,7 +56,12 @@ const PartieCard = ({ partie }: { partie: PARTIE_T }) => {
                     variant='solid'
                     endDecorator={<FontAwesomeIcon icon={faArrowRight} />}
                 >Gerer</Button>
-                <Button>Modifier</Button>
+                <Button
+                    fullWidth
+                    color='neutral'
+                    variant='soft'
+                    onClick={() => setpartieToEdit(partie)}
+                >Modifier</Button>
                 <Button
                     color='danger'
                     variant='soft'
