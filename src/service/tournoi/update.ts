@@ -1,9 +1,9 @@
 import { axiosInstance } from "../../constant";
-import { TOURNOI_T, USER_T } from "../../types";
+import { TOURNOI_T } from "../../types";
 
-export const create = async (tournoi: {
-    nom: string,
-    id_status: string,
+export const update = async (id: string, tournoi: {
+    nom?: string,
+    id_status?: string,
     date_debut?: string,
     frais_inscription?: string,
     montant_a_gagner?: string,
@@ -11,7 +11,7 @@ export const create = async (tournoi: {
     id_gagnant?: string,
 }) => {
     try {
-        const { data } = await axiosInstance.post(`/tournoi`, tournoi);
+        const { data } = await axiosInstance.put(`/tournoi/${id}`, tournoi);
 
         return data.data as TOURNOI_T;
     } catch (error: any) {

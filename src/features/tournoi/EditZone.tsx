@@ -1,19 +1,41 @@
 import { Button, Divider, Modal, ModalClose, ModalDialog, Typography } from '@mui/joy';
-import { useContext, useState } from 'react';
+import { useContext, useEffect, useState } from 'react';
 import GenericForm from '../../components/GeneriqueForm';
 import { STATUS_T, TOURNOI_T } from '../../types';
-import { createTournoi } from '../../service/tournoi';
+import { createTournoi, updateTournoi } from '../../service/tournoi';
 import { TournoiContext } from '../../providers/TournoiContext';
 
 const EditZone = () => {
-    const { settournoiList, statusList, tournoiList } = useContext(TournoiContext);
+    const { settournoiList, statusList, tournoiList, tournoiToEdit, settournoiToEdit } = useContext(TournoiContext);
 
     const [isOpen, setisOpen] = useState(false);
+
+    const onSubmit = async (data: any) => {
+        try {
+            return await (
+                tournoiToEdit ? updateTournoi(tournoiToEdit.id, data as any)
+                    : createTournoi(data)
+            );
+
+        } catch (error) {
+            return false;
+        }
+    };
+
+    useEffect(() => {
+        tournoiToEdit && setisOpen(true);
+    }, [tournoiToEdit])
+
+    useEffect(
+        () => {
+            !isOpen && settournoiToEdit(undefined);
+        },
+        [isOpen]
+    )
 
     if (!isOpen) {
         return <Button children="Ajouter" onClick={() => setisOpen(true)} />;
     }
-
 
     return (
         <Modal
@@ -28,7 +50,7 @@ const EditZone = () => {
                 }}
             >
                 <ModalClose />
-                <Typography level='h4'>Ajouter un tournoi</Typography>
+                <Typography level='h4'>{tournoiToEdit ? `Modifier` : `Ajouter`} un tournoi</Typography>
                 <Divider />
 
                 <GenericForm<TOURNOI_T>
@@ -76,14 +98,22 @@ const EditZone = () => {
                         xs: 12,
                         sm: 6,
                     },]}
-                    treatmentFonction={createTournoi as any}
+                    treatmentFonction={onSubmit as any}
                     submitButtonText="Valider"
                     cancelButtonText="Annuler"
-                    initialData={undefined}
+                    initialData={tournoiToEdit}
                     onCancel={() => { setisOpen(false) }}
                     onSubmitSuccess={(data) => {
                         if (data) {
-                            settournoiList([...tournoiList, data as TOURNOI_T]);
+                            if (tournoiToEdit) {
+                                const index = tournoiList.findIndex(t => t.id === tournoiToEdit.id);
+                                if (index !== -1) {
+                                    tournoiList[index] = data;
+                                    settournoiList([...tournoiList]);
+                                }
+                            } else {
+                                settournoiList([...tournoiList, data]);
+                            }
                             setisOpen(false);
                         }
                     }}

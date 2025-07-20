@@ -11,6 +11,7 @@ import { getAllSatus } from '../../service/status'
 const Tournoi = () => {
     const [tournoiList, settournoiList] = useState([] as TOURNOI_T[]);
     const [statusList, setstatusList] = useState([] as STATUS_T[]);
+    const [tournoiToEdit, settournoiToEdit] = useState(undefined as TOURNOI_T | undefined);
 
     const loadTournoi = useCallback(async () => {
         const res = await getAllTournoi();
@@ -34,7 +35,9 @@ const Tournoi = () => {
         <TournoiContext.Provider value={{
             tournoiList,
             settournoiList,
-            statusList
+            statusList,
+            tournoiToEdit,
+            settournoiToEdit
         }} >
 
             <Stack>

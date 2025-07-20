@@ -10,7 +10,7 @@ import { TournoiContext } from '../../providers/TournoiContext'
 
 const TournoiCard = ({ tournoi }: { tournoi: TOURNOI_T }) => {
     const navigate = useNavigate();
-    const { settournoiList } = useContext(TournoiContext);
+    const { settournoiList, settournoiToEdit } = useContext(TournoiContext);
 
     const [deleteLoadingState, setdeleteLoadingState] = useState(null as LOADING_STATE_T)
 
@@ -26,7 +26,7 @@ const TournoiCard = ({ tournoi }: { tournoi: TOURNOI_T }) => {
                 return;
             }
             toast.success("Tournoi supprimé avec succès");
-            
+
             settournoiList((prevList) => prevList.filter(t => t.id !== tournoi.id));
 
         } catch (error) {
@@ -88,6 +88,7 @@ const TournoiCard = ({ tournoi }: { tournoi: TOURNOI_T }) => {
                 >Gerer</Button>
                 <Button
                     color='neutral'
+                    onClick={() => settournoiToEdit(tournoi)}
                 >Modifier</Button>
                 <Button
                     color='danger'
