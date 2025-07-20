@@ -7,7 +7,7 @@ import { toast } from 'react-toastify';
 export type FormField = {
     name: string;
     label: string;
-    type: 'text' | 'password' | 'email' | 'number' | 'select' | 'textarea';
+    type: 'text' | 'password' | 'email' | 'number' | 'select' | 'textarea' | 'date' | 'datetime-local';
     required?: boolean;
     placeholder?: string;
     defaultValue?: string; // valeurs par défaut initiales si pas d'initialData
@@ -114,6 +114,8 @@ const GenericForm = <T extends Record<string, any>>({ // Utilisation d'un type g
             case 'text':
             case 'password':
             case 'email':
+            case 'date':
+            case 'datetime-local':
             case 'number':
                 return <Input type={field.type} {...commonProps} />;
             case 'select':
