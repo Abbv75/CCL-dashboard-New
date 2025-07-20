@@ -9,7 +9,7 @@ import { toast } from 'react-toastify';
 import { deleteUser } from '../../service/user';
 
 const ListZone = () => {
-    const { userList, loadUser, loadingState, setuserToEdit, setiduserPasswordToEdit } = useContext(UserContext);
+    const { userList, setuserList, loadingState, setuserToEdit, setuserPasswordToEdit } = useContext(UserContext);
 
     const handleDelete = async (id: string) => {
         try {
@@ -21,7 +21,8 @@ const ListZone = () => {
                 return;
             }
             toast.success("Utilisateur supprimé avec succès");
-            await loadUser();
+            
+            setuserList(prev => prev.filter(user => user.id !== id));
         } catch (error) {
             console.error("Error deleting user:", error);
             toast.error("Suppression de l'utilisateur a échoué");
@@ -74,7 +75,7 @@ const ListZone = () => {
                         <Tooltip title={`Changer le mot de passe`} >
                             <IconButton
                                 children={<FontAwesomeIcon icon={faKey} />}
-                                onClick={() => setiduserPasswordToEdit(value.id)}
+                                onClick={() => setuserPasswordToEdit(value)}
                             />
                         </Tooltip>
                         <Tooltip title={`Modifier`} >

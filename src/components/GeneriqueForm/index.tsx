@@ -1,5 +1,5 @@
 import { Button, ButtonGroup, Divider, FormControl, FormLabel, Grid, Input, Option, Select, Stack, Textarea } from '@mui/joy';
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faPaperPlane, faTimesCircle } from '@fortawesome/free-solid-svg-icons';
 import { toast } from 'react-toastify';
@@ -10,49 +10,72 @@ export type FormField = {
     type: 'text' | 'password' | 'email' | 'number' | 'select' | 'textarea';
     required?: boolean;
     placeholder?: string;
-    defaultValue?: string;
+    defaultValue?: string; // valeurs par défaut initiales si pas d'initialData
     startDecorator?: React.ReactNode;
     options?: { value: string | number; label: string }[]; // Pour les champs de type 'select'
     conditionalRender?: { // Pour les champs qui apparaissent sous condition
         field: string; // Le nom du champ qui détermine la condition
         value: string | number; // La valeur de ce champ pour que le champ actuel soit rendu
     };
+    readOnly?: boolean; // prop pour les champs en lecture seule
+    xs?: number;
+    sm?: number;
 };
 
-export type GenericFormProps = {
+export type GenericFormProps<T extends Record<string, any>> = { // Utilisation d'un type générique T
     fields: FormField[];
-    treatmentFonction: (data: Record<string, any>) => Promise<boolean | any>;
+    treatmentFonction: (data: T) => Promise<boolean | any>; // La fonction de traitement reçoit les données
+    initialData?: T; //  prop pour les données initiales (mode modification)
     onSubmitSuccess?: (data?: any) => any;
-    onCancel?: (data?: any) => any;
+    onCancel?: () => void;
     submitButtonText?: string;
     cancelButtonText?: string;
     loadingStateText?: string;
 };
 
-const GenericForm = ({
+const GenericForm = <T extends Record<string, any>>({ // Utilisation d'un type générique T
     fields,
     treatmentFonction,
+    initialData,
     onSubmitSuccess,
     onCancel,
     submitButtonText = "Enregistrer",
     cancelButtonText = "Annuler",
     loadingStateText = "En cours de chargement."
-}: GenericFormProps) => {
+}: GenericFormProps<T>) => {
     const [loading, setLoading] = useState(false);
-    const [formValues, setFormValues] = useState<Record<string, any>>(() => {
-        // Initialise les valeurs du formulaire avec les defaultValue des champs
-        const initialValues: Record<string, any> = {};
+    const [formValues, setFormValues] = useState<T>(() => {
+        // Initialise les valeurs du formulaire avec initialData si fourni, sinon avec les defaultValue
+        if (initialData) {
+            return initialData;
+        }
+        const initial: Record<string, any> = {};
         fields.forEach(field => {
-            if (field.defaultValue) {
-                initialValues[field.name] = field.defaultValue;
+            if (field.defaultValue !== undefined) {
+                initial[field.name] = field.defaultValue;
             }
         });
-        return initialValues;
+        return initial as T;
     });
 
+    // Mettre à jour formValues si initialData change (utile si le formulaire est réutilisé pour différentes entités)
+    // ou si les champs changent (ex: si le composant est monté une fois et ses props changent)
+    useEffect(() => {
+        if (initialData) {
+            setFormValues(initialData);
+        } else {
+            const initial: Record<string, any> = {};
+            fields.forEach(field => {
+                if (field.defaultValue !== undefined) {
+                    initial[field.name] = field.defaultValue;
+                }
+            });
+            setFormValues(initial as T);
+        }
+    }, [initialData, fields]);
+
     const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement> | any, name: string) => {
-        // Gère les changements pour les inputs et textareas, et pour Select (via any pour le moment)
-        const value = e && e.target ? e.target.value : e; // Gère spécifiquement le cas du Select de Joy UI
+        const value = e && e.target ? e.target.value : e;
         setFormValues(prev => ({ ...prev, [name]: value }));
     };
 
@@ -60,14 +83,14 @@ const GenericForm = ({
         e.preventDefault();
         setLoading(true);
         try {
-            const success = await treatmentFonction(formValues);
-            if (!success) {
+            const result = await treatmentFonction(formValues);
+            if (!result) {
                 toast.error("Erreur lors de la soumission du formulaire.");
                 return;
             }
 
-            toast.success("Formulaire soumis avec succès.");
-            onSubmitSuccess && onSubmitSuccess();
+            toast.success("Opération réussie !");
+            onSubmitSuccess && onSubmitSuccess(result);
         } catch (error) {
             console.error("Erreur lors de la soumission du formulaire:", error);
             toast.error("Une erreur s'est produite lors de la soumission du formulaire.");
@@ -80,10 +103,10 @@ const GenericForm = ({
         const commonProps = {
             name: field.name,
             placeholder: field.placeholder,
-            defaultValue: field.defaultValue,
             required: field.required,
             startDecorator: field.startDecorator,
-            value: formValues[field.name] || '', // Contrôler le composant
+            readOnly: field.readOnly, // Utilisation de la prop readOnly
+            value: formValues[field.name] ?? '',
             onChange: (e: any) => handleChange(e, field.name),
         };
 
@@ -98,7 +121,7 @@ const GenericForm = ({
                     <Select
                         {...commonProps}
                         onChange={(e, value) => handleChange(value, field.name)}
-                        value={formValues[field.name] || ''}
+                        value={formValues[field.name] ?? ''}
                     >
                         {field.options && field.options.map((option, idx) => (
                             <Option key={idx} value={option.value}>{option.label}</Option>
@@ -125,7 +148,6 @@ const GenericForm = ({
                     overflowY: 'auto',
                     mx: -1
                 }}
-                alignSelf={'center'}
             >
                 {fields.map((field, index) => {
                     const shouldRender = field.conditionalRender
@@ -133,7 +155,7 @@ const GenericForm = ({
                         : true;
 
                     return (shouldRender && (
-                        <Grid xs={12} sm={6}>
+                        <Grid xs={field.xs || 12} sm={field.sm || 12} key={field.name || index}>
                             <FormControl required={field.required}>
                                 <FormLabel>{field.label}</FormLabel>
                                 {renderField(field)}

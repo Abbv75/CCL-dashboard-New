@@ -8,6 +8,7 @@ import { getAllUser } from '../../service/user'
 import { UserContext } from '../../providers/UserContext'
 import ListZone from '../../features/User/ListZone'
 import EditUserForm from '../../features/User/EditUserForm'
+import EditUserPassword from '../../features/User/EditUserPassword'
 
 const User = () => {
     const [roleList, setroleList] = useState([] as ROLE_T[]);
@@ -16,7 +17,7 @@ const User = () => {
     const [selectedRole, setselectedRole] = useState(null as string | null);
     const [searchValue, setsearchValue] = useState(undefined as string | undefined);
     const [userToEdit, setuserToEdit] = useState(undefined as USER_T | undefined);
-    const [iduserPasswordToEdit, setiduserPasswordToEdit] = useState(undefined as string | undefined);
+    const [userPasswordToEdit, setuserPasswordToEdit] = useState(undefined as USER_T | undefined);
 
     const loadRole = useCallback(async () => {
         const res = await getAllRole();
@@ -66,8 +67,8 @@ const User = () => {
             roleList,
             userToEdit,
             setuserToEdit,
-            iduserPasswordToEdit,
-            setiduserPasswordToEdit
+            userPasswordToEdit,
+            setuserPasswordToEdit
         }} >
             <Stack width={"100%"} >
                 <Typography level='h2'>Gestion des utilisateurs</Typography>
@@ -98,6 +99,7 @@ const User = () => {
                         </Stack>
 
                         <EditUserForm />
+                        <EditUserPassword />
                     </Stack>
 
                     <ListZone />
