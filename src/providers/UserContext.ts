@@ -7,4 +7,5 @@ export const UserContext = createContext({} as {
     loadingState: LOADING_STATE_T,
     roleList: ROLE_T[],
     userToEdit?: USER_T, setuserToEdit: USE_STATE_T<USER_T | undefined>,
+    iduserPasswordToEdit?: string, setiduserPasswordToEdit: USE_STATE_T<string | undefined>
 });

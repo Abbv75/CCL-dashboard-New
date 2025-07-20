@@ -16,6 +16,7 @@ const User = () => {
     const [selectedRole, setselectedRole] = useState(null as string | null);
     const [searchValue, setsearchValue] = useState(undefined as string | undefined);
     const [userToEdit, setuserToEdit] = useState(undefined as USER_T | undefined);
+    const [iduserPasswordToEdit, setiduserPasswordToEdit] = useState(undefined as string | undefined);
 
     const loadRole = useCallback(async () => {
         const res = await getAllRole();
@@ -64,7 +65,9 @@ const User = () => {
             loadingState,
             roleList,
             userToEdit,
-            setuserToEdit
+            setuserToEdit,
+            iduserPasswordToEdit,
+            setiduserPasswordToEdit
         }} >
             <Stack width={"100%"} >
                 <Typography level='h2'>Gestion des utilisateurs</Typography>

@@ -3,13 +3,13 @@ import CustomTable from '../../components/CustomTable'
 import { UserContext } from '../../providers/UserContext'
 import { ButtonGroup, IconButton, LinearProgress, Tooltip } from '@mui/joy';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faEnvelopeOpen, faFeather, faPhoneAlt, faTrashArrowUp } from '@fortawesome/free-solid-svg-icons';
+import { faEnvelopeOpen, faFeather, faKey, faPhoneAlt, faTrashArrowUp } from '@fortawesome/free-solid-svg-icons';
 import { faWhatsapp } from '@fortawesome/free-brands-svg-icons';
 import { toast } from 'react-toastify';
 import { deleteUser } from '../../service/user';
 
 const ListZone = () => {
-    const { userList, loadUser, loadingState, setuserToEdit } = useContext(UserContext);
+    const { userList, loadUser, loadingState, setuserToEdit, setiduserPasswordToEdit } = useContext(UserContext);
 
     const handleDelete = async (id: string) => {
         try {
@@ -71,11 +71,17 @@ const ListZone = () => {
                 ),
                 (
                     <ButtonGroup>
+                        <Tooltip title={`Changer le mot de passe`} >
+                            <IconButton
+                                children={<FontAwesomeIcon icon={faKey} />}
+                                onClick={() => setiduserPasswordToEdit(value.id)}
+                            />
+                        </Tooltip>
                         <Tooltip title={`Modifier`} >
                             <IconButton
                                 children={<FontAwesomeIcon icon={faFeather} />}
-                                onClick={() => setuserToEdit(value)}
                                 color='primary'
+                                onClick={() => setuserToEdit(value)}
                             />
                         </Tooltip>
                         <Tooltip title={`Supprimer`} color='danger' >
