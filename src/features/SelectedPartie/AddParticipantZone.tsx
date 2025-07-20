@@ -2,14 +2,14 @@ import { faCheck, faUserPlus } from '@fortawesome/free-solid-svg-icons'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { Button, Input, Modal, ModalClose, ModalDialog, Radio, RadioGroup, Stack, Typography } from '@mui/joy'
 import { useCallback, useContext, useEffect, useState } from 'react'
-import { SelectedTournoiContext } from '../../providers/SelectedTournoiContext'
 import { LOADING_STATE_T, USER_T } from '../../types'
-import { addParticipants } from '../../service/tournoi'
 import { toast } from 'react-toastify'
 import { getAllUser } from '../../service/user'
+import { SelectedPartieContext } from '../../providers/SelectedPartieContext'
+import { addParticipantsToPartie } from '../../service/partie'
 
 const AddParticipantZone = () => {
-    const { tournoi, settournoi } = useContext(SelectedTournoiContext);
+    const { tournoi, partie, loadPartie } = useContext(SelectedPartieContext);
 
     const [userList, setuserList] = useState([] as USER_T[]);
     const [selectedId, setselectedId] = useState([] as string[]);
@@ -26,20 +26,18 @@ const AddParticipantZone = () => {
 
     const handleSubmit = async () => {
         try {
-            if (!tournoi || selectedId.length === 0) return;
+            if (!tournoi || selectedId.length === 0 || !partie) return;
             setloadingSate("En cours de chargement.");
 
-            const res = await addParticipants(tournoi.id, selectedId);
+            const res = await addParticipantsToPartie(tournoi.id, partie.id, selectedId);
             if (!res) {
                 toast.error("Une erreur est survenue lors de l'ajout des participants.");
                 return;
             };
 
+            loadPartie();
+
             toast.success("Participants ajoutés avec succès.");
-            settournoi({
-                ...tournoi,
-                participants: [...(tournoi.participants || []), ...(res?.participants || [])]
-            });
 
             setselectedId([]);
 

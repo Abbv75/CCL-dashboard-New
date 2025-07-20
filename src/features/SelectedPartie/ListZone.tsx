@@ -4,25 +4,26 @@ import { ButtonGroup, IconButton, LinearProgress, Tooltip } from '@mui/joy';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faEnvelopeOpen, faPhoneAlt, faUserTimes } from '@fortawesome/free-solid-svg-icons';
 import { faWhatsapp } from '@fortawesome/free-brands-svg-icons';
-import { SelectedTournoiContext } from '../../providers/SelectedTournoiContext';
 import { USER_T } from '../../types';
-import { removeParticipants } from '../../service/tournoi';
 import { toast } from 'react-toastify';
+import { SelectedPartieContext } from '../../providers/SelectedPartieContext';
+import { removeParticipantsToPartie } from '../../service/partie';
 
 const ListZone = () => {
-    const { tournoi } = useContext(SelectedTournoiContext);
+    const { partie, tournoi, loadPartie } = useContext(SelectedPartieContext);
 
     const [userList, setuserList] = useState([] as USER_T[]);
 
     const handleRemove = async (id: string) => {
         try {
-            if (!tournoi || !window.confirm(`Etes vous sur?`)) return;
+            if (!partie || !window.confirm(`Etes vous sur?`)) return;
 
-            const res = await removeParticipants(tournoi.id, [id]);
+            const res = await removeParticipantsToPartie(tournoi.id, partie.id, [id]);
             if (!res) return;
 
             setuserList(userList.filter(user => user.idCOD !== id));
             toast.success("Participant supprimé avec succès.");
+            loadPartie();
         } catch (error) {
             console.error("Error removing participant:", error);
             toast.error("Une erreur est survenue lors de la suppression du participant.");
@@ -30,11 +31,11 @@ const ListZone = () => {
     };
 
     useEffect(() => {
-        if (!tournoi) return;
-        setuserList(tournoi?.participants || []);
-    }, [tournoi]);
+        if (!partie) return;
+        setuserList(partie?.participants || []);
+    }, [partie]);
 
-    if (tournoi === undefined) {
+    if (partie === undefined) {
         return <LinearProgress />
     }
 

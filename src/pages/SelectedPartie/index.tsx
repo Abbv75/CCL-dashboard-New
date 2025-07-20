@@ -1,20 +1,18 @@
-import { Breadcrumbs, Divider, Stack, Tab, tabClasses, TabList, TabPanel, Tabs, Typography } from '@mui/joy'
+import { Breadcrumbs, Divider, Stack, Typography } from '@mui/joy'
 import { useCallback, useEffect, useState } from 'react'
-import { PARTIE_T, STATUS_T, TOURNOI_T } from '../../types'
-import { getTournoi } from '../../service/tournoi'
+import { PARTIE_T, TOURNOI_T } from '../../types'
 import { SelectedPartieContext, } from '../../providers/SelectedPartieContext'
 import { Link, useParams } from 'react-router-dom'
-import ListZone from '../../features/SelectedTournoi/ListZone'
-import AddParticipantZone from '../../features/SelectedTournoi/AddParticipantZone'
-import PartieList from '../../features/SelectedTournoi/PartieZone/PartieList'
-import EditPartieForm from '../../features/SelectedTournoi/PartieZone/EditPartieForm'
-import { getAllSatus } from '../../service/status'
 import { getPartie } from '../../service/partie'
+import ListZone from '../../features/SelectedPartie/ListZone'
+import { getTournoi } from '../../service/tournoi'
+import AddParticipantZone from '../../features/SelectedPartie/AddParticipantZone'
 
 const SelectedPartie = () => {
     const { idTournoi, idPartie } = useParams();
 
     const [partie, setpartie] = useState(undefined as PARTIE_T | undefined);
+    const [tournoi, settournoi] = useState(undefined as TOURNOI_T | undefined);
 
     const loadPartie = useCallback(async () => {
         const res = await getPartie(idTournoi as string, idPartie as string);
@@ -22,71 +20,44 @@ const SelectedPartie = () => {
         setpartie(res);
     }, []);
 
-    useEffect(() => {
-        loadPartie();
+    const loadTournoi = useCallback(async () => {
+        const res = await getTournoi(idTournoi as string);
+        if (!res) return;
+        settournoi(res);
     }, []);
 
-    if (!partie) {
+    useEffect(() => {
+        loadPartie();
+        loadTournoi();
+    }, []);
+
+    if (!partie || !tournoi) {
         return;
     }
 
     return (
         <SelectedPartieContext.Provider value={{
-            partie
+            partie,
+            tournoi,
+            loadPartie
         }} >
             <Stack>
                 <Breadcrumbs separator=">" aria-label="breadcrumbs">
                     <Link to="/tournoi" style={{ textDecoration: 'none' }}>
                         <Typography level='h4'>Gestion des tournois</Typography>
                     </Link>
-                    <Typography level='title-md'>...</Typography>
+                    <Link to={`/tournoi-selectionne/${idTournoi}`} style={{ textDecoration: 'none' }}>
+                        <Typography level='title-md'>...</Typography>
+                    </Link>
                     <Typography level='title-md'>{partie.dateHeure}</Typography>
                 </Breadcrumbs>
 
                 <Divider sx={{ width: 100 }} />
 
                 <Stack mt={5} gap={5} >
-                    <Tabs defaultValue={1} sx={{ bgcolor: 'transparent' }}>
-                        <TabList
-                            disableUnderline
-                            sx={{
-                                p: 0.5,
-                                gap: 0.5,
-                                borderRadius: 'xl',
-                                borderBottomLeftRadius: 0,
-                                borderBottomRightRadius: 0,
-                                bgcolor: 'background.level1',
-                                [`& .${tabClasses.root}[aria-selected="true"]`]: {
-                                    boxShadow: 'sm',
-                                    bgcolor: 'background.surface',
-                                },
-                            }}
-                            tabFlex="auto"
-                        >
-                            <Tab disableIndicator>
-                                <Typography level='title-md'>Gestion des participants</Typography>
-                            </Tab>
-                            <Tab disableIndicator>
-                                <Typography level='title-md'>Gestion des parties</Typography>
-                            </Tab>
-                        </TabList>
+                    <AddParticipantZone />
 
-                        <TabPanel
-                            value={0}
-                            sx={{ px: 0, gap: 2, display: 'flex', flexDirection: 'column', }}
-                        >
-                            <AddParticipantZone />
-                            <ListZone />
-                        </TabPanel>
-
-                        <TabPanel
-                            value={1}
-                            sx={{ px: 0, gap: 2, display: 'flex', flexDirection: 'column', }}
-                        >
-                            <EditPartieForm />
-                            <PartieList />
-                        </TabPanel>
-                    </Tabs>
+                    <ListZone />
                 </Stack>
             </Stack>
         </SelectedPartieContext.Provider>
