@@ -1,19 +1,19 @@
 import { Button, ButtonGroup, Divider, FormControl, FormLabel, Grid, Input, Modal, ModalClose, ModalDialog, Option, Select, Typography } from '@mui/joy';
-import React, { useContext, useState } from 'react'
+import React, { useContext, useEffect, useState } from 'react'
 import { UserContext } from '../../providers/UserContext';
 import { Collapse } from '@mui/material';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faEnvelope, faLocationPin, faPaperPlane, faPhone, faTimesCircle } from '@fortawesome/free-solid-svg-icons';
 import { faWhatsapp } from '@fortawesome/free-brands-svg-icons';
 import { LOADING_STATE_T } from '../../types';
-import { createUser } from '../../service/user';
+import { createUser, updateUser } from '../../service/user';
 import { toast } from 'react-toastify';
 
-const AddUserForm = () => {
-    const { roleList, setuserList } = useContext(UserContext);
+const EditUserForm = () => {
+    const { roleList, setuserList, userToEdit, setuserToEdit } = useContext(UserContext);
 
     const [isOpen, setisOpen] = useState(true);
-    const [selectedRole, setselectedRole] = useState(roleList[0]?.id || null);
+    const [selectedRole, setselectedRole] = useState(userToEdit?.id_role || (roleList[0]?.id || null));
     const [loadingState, setloadingState] = useState(null as LOADING_STATE_T);
 
     const onSubmit = async (e: React.FormEvent) => {
@@ -23,11 +23,16 @@ const AddUserForm = () => {
             const formData = new FormData(e.currentTarget as HTMLFormElement);
             const data = Object.fromEntries(formData.entries());
 
-            const res = await createUser(data as any);
+            const res = await (
+                userToEdit ? updateUser(userToEdit?.id as any, data as any)
+                    : createUser(data as any)
+            );
+
             if (!res) {
                 toast.error("Erreur lors de la création de l'utilisateur.");
                 return;
             }
+            
             toast.success("Utilisateur créé avec succès.");
             setuserList(prev => [...prev, res]);
             setisOpen(false);
@@ -39,6 +44,20 @@ const AddUserForm = () => {
             setloadingState(null);
         }
     };
+
+    useEffect(
+        () => {
+            if (!isOpen) setuserToEdit(undefined);
+        },
+        [isOpen]
+    )
+
+    useEffect(
+        () => {
+            if (userToEdit) setisOpen(true);
+        },
+        [userToEdit]
+    )
 
     if (!isOpen) return <Button children="Ajouter" onClick={() => setisOpen(true)} />;
 
@@ -57,7 +76,7 @@ const AddUserForm = () => {
                 onSubmit={onSubmit}
             >
                 <ModalClose />
-                <Typography level='h4'>Ajouter un utilisateur</Typography>
+                <Typography level='h4'>{userToEdit ? 'Modifier' : 'Ajouter'} un utilisateur</Typography>
                 <Divider />
 
                 <Grid
@@ -74,43 +93,55 @@ const AddUserForm = () => {
                     <Grid xs={12} sm={6}>
                         <FormControl required>
                             <FormLabel>Nom complet</FormLabel>
-                            <Input name='nomComplet' placeholder="Ex: Younouss Bore" />
-                        </FormControl>
-                    </Grid>
-
-                    <Grid xs={12} sm={6}>
-                        <FormControl required>
-                            <FormLabel>Login</FormLabel>
-                            <Input name='login' placeholder="Ex: Younouss Bore" />
-                        </FormControl>
-                    </Grid>
-
-                    <Grid xs={12} sm={6}>
-                        <FormControl required>
-                            <FormLabel>Mot de passe</FormLabel>
                             <Input
+                                name='nomComplet'
                                 placeholder="Ex: Younouss Bore"
-                                type="password"
-                                name='motDePasse'
+                                defaultValue={userToEdit?.nomComplet || ''}
                             />
                         </FormControl>
                     </Grid>
 
                     <Grid xs={12} sm={6}>
                         <FormControl required>
-                            <FormLabel>Role</FormLabel>
-                            <Select
-                                name='id_role'
-                                value={selectedRole}
-                                onChange={(e, value) => setselectedRole(value)}
-                                defaultValue={selectedRole}
-                            >
-                                {roleList && roleList.map((value, index) => (
-                                    <Option value={value.id}>{value.nom}</Option>
-                                ))}
-                            </Select>
+                            <FormLabel>Login</FormLabel>
+                            <Input
+                                name='login'
+                                placeholder="Ex: Younouss Bore"
+                                defaultValue={userToEdit?.login || ''}
+                            />
                         </FormControl>
                     </Grid>
+
+                    {!userToEdit && (
+                        <Grid xs={12} sm={6}>
+                            <FormControl required>
+                                <FormLabel>Mot de passe</FormLabel>
+                                <Input
+                                    placeholder="Ex: Younouss Bore"
+                                    type="password"
+                                    name='motDePasse'
+                                />
+                            </FormControl>
+                        </Grid>
+                    )}
+
+                    {!userToEdit && (
+                        <Grid xs={12} sm={6}>
+                            <FormControl required>
+                                <FormLabel>Role</FormLabel>
+                                <Select
+                                    name='id_role'
+                                    value={selectedRole}
+                                    onChange={(e, value) => setselectedRole(value)}
+                                    defaultValue={selectedRole}
+                                >
+                                    {roleList && roleList.map((value, index) => (
+                                        <Option value={value.id}>{value.nom}</Option>
+                                    ))}
+                                </Select>
+                            </FormControl>
+                        </Grid>
+                    )}
 
                     <Collapse sx={{ width: '100%' }} in={selectedRole === 'R01'} timeout={500} >
                         <Grid xs={12} sm={6} >
@@ -119,6 +150,7 @@ const AddUserForm = () => {
                                 <Input
                                     placeholder="Ex: 121154512"
                                     name='idCOD'
+                                    defaultValue={userToEdit?.idCOD || undefined}
                                 />
                             </FormControl>
                         </Grid>
@@ -136,6 +168,8 @@ const AddUserForm = () => {
                             <Input
                                 placeholder="Ex: 77 123 45 67"
                                 name='telephone'
+                                type='tel'
+                                defaultValue={userToEdit?.contact?.telephone || ''}
                                 startDecorator={<FontAwesomeIcon icon={faPhone} />}
                             />
                         </FormControl>
@@ -148,6 +182,7 @@ const AddUserForm = () => {
                                 placeholder="Ex: 123@gmail.com"
                                 name='email'
                                 type='email'
+                                defaultValue={userToEdit?.contact?.email || undefined}
                                 startDecorator={<FontAwesomeIcon icon={faEnvelope} />}
                             />
                         </FormControl>
@@ -159,6 +194,8 @@ const AddUserForm = () => {
                             <Input
                                 placeholder="Ex: +223771234567"
                                 name='whatsapp'
+                                type='tel'
+                                defaultValue={userToEdit?.contact?.whatsapp || undefined}
                                 startDecorator={<FontAwesomeIcon icon={faWhatsapp} />}
                             />
                         </FormControl>
@@ -170,7 +207,7 @@ const AddUserForm = () => {
                             <Input
                                 placeholder="Ex: Bamako"
                                 name='adresse'
-                                defaultValue={'Bamako'}
+                                defaultValue={userToEdit?.contact?.adresse || 'Bamako'}
                                 startDecorator={<FontAwesomeIcon icon={faLocationPin} />}
                             />
                         </FormControl>
@@ -200,4 +237,4 @@ const AddUserForm = () => {
     )
 }
 
-export default AddUserForm
+export default EditUserForm

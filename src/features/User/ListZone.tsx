@@ -9,7 +9,7 @@ import { toast } from 'react-toastify';
 import { deleteUser } from '../../service/user';
 
 const ListZone = () => {
-    const { userList, loadUser, loadingState } = useContext(UserContext);
+    const { userList, loadUser, loadingState, setuserToEdit } = useContext(UserContext);
 
     const handleDelete = async (id: string) => {
         try {
@@ -72,9 +72,13 @@ const ListZone = () => {
                 (
                     <ButtonGroup>
                         <Tooltip title={`Modifier`} >
-                            <IconButton children={<FontAwesomeIcon icon={faFeather} />} />
+                            <IconButton
+                                children={<FontAwesomeIcon icon={faFeather} />}
+                                onClick={() => setuserToEdit(value)}
+                                color='primary'
+                            />
                         </Tooltip>
-                        <Tooltip title={`Supprimeer`} color='danger' >
+                        <Tooltip title={`Supprimer`} color='danger' >
                             <IconButton
                                 color='danger'
                                 children={<FontAwesomeIcon icon={faTrashArrowUp} />}

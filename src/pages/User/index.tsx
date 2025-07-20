@@ -1,13 +1,13 @@
 import { faSearch } from '@fortawesome/free-solid-svg-icons'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import { Button, Divider, Input, Option, Select, Stack, Typography } from '@mui/joy'
+import { Divider, Input, Option, Select, Stack, Typography } from '@mui/joy'
 import { useCallback, useEffect, useMemo, useState } from 'react'
 import { LOADING_STATE_T, ROLE_T, USER_T } from '../../types'
 import { getAllRole } from '../../service/role'
 import { getAllUser } from '../../service/user'
 import { UserContext } from '../../providers/UserContext'
 import ListZone from '../../features/User/ListZone'
-import AddUserForm from '../../features/User/AddUserForm'
+import EditUserForm from '../../features/User/EditUserForm'
 
 const User = () => {
     const [roleList, setroleList] = useState([] as ROLE_T[]);
@@ -15,6 +15,7 @@ const User = () => {
     const [loadingState, setloadingState] = useState("En cours de chargement." as LOADING_STATE_T);
     const [selectedRole, setselectedRole] = useState(null as string | null);
     const [searchValue, setsearchValue] = useState(undefined as string | undefined);
+    const [userToEdit, setuserToEdit] = useState(undefined as USER_T | undefined);
 
     const loadRole = useCallback(async () => {
         const res = await getAllRole();
@@ -61,7 +62,9 @@ const User = () => {
             setuserList,
             loadUser,
             loadingState,
-            roleList
+            roleList,
+            userToEdit,
+            setuserToEdit
         }} >
             <Stack width={"100%"} >
                 <Typography level='h2'>Gestion des utilisateurs</Typography>
@@ -91,10 +94,8 @@ const User = () => {
                             </Select>
                         </Stack>
 
-                        <AddUserForm />
+                        <EditUserForm />
                     </Stack>
-
-
 
                     <ListZone />
                 </Stack>

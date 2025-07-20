@@ -1,11 +1,11 @@
 import { axiosInstance } from "../../constant";
 import { USER_T } from "../../types";
 
-export const create = async (user: {
-    nom: string,
-    login: string,
-    motDePasse: string,
-    id_role: string,
+export const update = async (id: string, user: {
+    nom?: string,
+    login?: string,
+    motDePasse?: string,
+    id_role?: string,
     idCOD?: string,
     telephone: 'string',
     email?: 'string',
@@ -13,7 +13,7 @@ export const create = async (user: {
     adresse?: 'string',
 }) => {
     try {
-        const { data } = await axiosInstance.post(`/user`, user);
+        const { data } = await axiosInstance.put(`/user/${id}`, user);
 
         return data.data as USER_T;
     } catch (error: any) {
