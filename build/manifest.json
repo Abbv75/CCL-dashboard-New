@@ -1,0 +1,25 @@
+{
+  "short_name": "maliProcessDashboard",
+  "name": "Logiciel de gestion de mali process",
+  "icons": [
+    {
+      "src": "favicon.ico",
+      "sizes": "160x81",
+      "type": "image/x-icon"
+    },
+    {
+      "src": "logo.jpg",
+      "type": "image/png",
+      "sizes": "160x81"
+    },
+    {
+      "src": "logo.jpg",
+      "type": "image/png",
+      "sizes": "160x81"
+    }
+  ],
+  "start_url": ".",
+  "display": "standalone",
+  "theme_color": "#000000",
+  "background_color": "#ffffff"
+}
