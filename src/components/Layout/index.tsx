@@ -4,11 +4,11 @@ import Navbar from '../Navbar'
 
 const Layout = ({ children }: { children?: any }) => {
     return (
-        <Stack height={"100vh"} >
+        <Stack height={"100vh"} maxWidth={'100vw'} >
             <Header />
-            <Stack direction={"row"} flex={1} >
+            <Stack direction={"row"} maxHeight={'calc(100% - 60px)'} maxWidth={'100%'} flex={1} >
                 <Navbar />
-                <Box p={1} flex={1} overflow={"scroll"} children={children} />
+                <Stack p={1} flex={1} maxHeight={'100%'} sx={{overflowY : 'scroll', }} children={children} />
             </Stack>
 
         </Stack>

@@ -7,7 +7,7 @@ import { getAllRole } from '../../service/role'
 import { getAllUser } from '../../service/user'
 import { UserContext } from '../../providers/UserContext'
 import ListZone from '../../features/User/ListZone'
-import AddUser from '../../features/User/AddUser'
+import AddUserForm from '../../features/User/AddUserForm'
 
 const User = () => {
     const [roleList, setroleList] = useState([] as ROLE_T[]);
@@ -60,10 +60,10 @@ const User = () => {
             userList: filterUser,
             setuserList,
             loadUser,
-            loadingState
+            loadingState,
+            roleList
         }} >
-
-            <Stack>
+            <Stack width={"100%"} >
                 <Typography level='h2'>Gestion des utilisateurs</Typography>
 
                 <Divider sx={{ width: 100 }} />
@@ -72,9 +72,9 @@ const User = () => {
                     <Stack direction={"row"} gap={2} justifyContent={"space-between"} alignItems={"center"} >
                         <Stack direction={"row"} gap={1} >
                             <Input
-                                sx={{ width: 300 }}
+                                sx={{ width: 250 }}
                                 endDecorator={<FontAwesomeIcon icon={faSearch} />}
-                                placeholder="ID, nom, login, numero ou email"
+                                placeholder="ID, nom, login, tel ou email"
                                 value={searchValue}
                                 onChange={({ target }) => setsearchValue(target.value)}
                             />
@@ -91,10 +91,10 @@ const User = () => {
                             </Select>
                         </Stack>
 
-                        <Button>Ajouter</Button>
+                        <AddUserForm />
                     </Stack>
 
-                    <AddUser />
+
 
                     <ListZone />
                 </Stack>
