@@ -3,8 +3,12 @@ import { Link, useLocation } from 'react-router-dom'
 import { PAGE_PATH } from '../../constant'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faArrowLeft, faLock } from '@fortawesome/free-solid-svg-icons'
+import { useContext } from 'react'
+import { AppContext } from '../../providers/AppContext'
 
 const Navbar = () => {
+    const {setcurrentUser} = useContext(AppContext);
+
     const { pathname } = useLocation();
 
     return (
@@ -14,7 +18,7 @@ const Navbar = () => {
             p: 1,
             minWidth: 200,
             justifyContent: "space-between",
-            
+
         }} >
             <Stack gap={1} >
 
@@ -30,7 +34,14 @@ const Navbar = () => {
                 ))}
             </Stack>
 
-            <Button color='danger' endDecorator={<FontAwesomeIcon icon={faLock} />} >Deconnexion</Button>
+            <Button
+                color='danger'
+                endDecorator={<FontAwesomeIcon icon={faLock} />}
+                onClick={()=>{
+                    setcurrentUser(undefined);
+                    localStorage.removeItem('currentUser');
+                }}
+            >Deconnexion</Button>
         </Card>
 
     )

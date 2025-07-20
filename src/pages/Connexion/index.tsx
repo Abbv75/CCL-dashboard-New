@@ -48,7 +48,7 @@ export default function Connexion() {
                 minHeight: '100vh', display: 'flex', justifyContent: 'center', alignItems: 'center', bgcolor: '#f5f5f5'
             }}
         >
-            <Card sx={{ borderRadius: 20, p: 1 }} >
+            <Card sx={{ borderRadius: 20, p: 1, }} >
                 <Grid
                     container
                     justifyContent={"center"}
