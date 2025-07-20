@@ -6,10 +6,13 @@ import { deletePartie } from '../../service/partie'
 import { useContext, useState } from 'react'
 import { SelectedTournoiContext } from '../../providers/SelectedTournoiContext'
 import { toast } from 'react-toastify'
+import { useNavigate } from 'react-router-dom'
 
 const PartieCard = ({ partie }: { partie: PARTIE_T }) => {
     const { tournoi, settournoi, setpartieToEdit } = useContext(SelectedTournoiContext);
     const [deleteLoadingState, setdeleteLoadingState] = useState(null as LOADING_STATE_T)
+
+    const navigate = useNavigate();
 
     const handleDelete = async () => {
         try {
@@ -55,6 +58,7 @@ const PartieCard = ({ partie }: { partie: PARTIE_T }) => {
                     color='primary'
                     variant='solid'
                     endDecorator={<FontAwesomeIcon icon={faArrowRight} />}
+                    onClick={() => navigate(`/partie-selectionne/${tournoi?.id}/${partie.id}`)}
                 >Gerer</Button>
                 <Button
                     fullWidth

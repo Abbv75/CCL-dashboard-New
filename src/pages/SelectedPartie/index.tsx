@@ -2,59 +2,45 @@ import { Breadcrumbs, Divider, Stack, Tab, tabClasses, TabList, TabPanel, Tabs, 
 import { useCallback, useEffect, useState } from 'react'
 import { PARTIE_T, STATUS_T, TOURNOI_T } from '../../types'
 import { getTournoi } from '../../service/tournoi'
+import { SelectedPartieContext, } from '../../providers/SelectedPartieContext'
 import { Link, useParams } from 'react-router-dom'
 import ListZone from '../../features/SelectedTournoi/ListZone'
 import AddParticipantZone from '../../features/SelectedTournoi/AddParticipantZone'
 import PartieList from '../../features/SelectedTournoi/PartieZone/PartieList'
 import EditPartieForm from '../../features/SelectedTournoi/PartieZone/EditPartieForm'
 import { getAllSatus } from '../../service/status'
-import { SelectedTournoiContext } from '../../providers/SelectedTournoiContext'
+import { getPartie } from '../../service/partie'
 
-const SelectedTournoi = () => {
-    const { idTournoi } = useParams();
+const SelectedPartie = () => {
+    const { idTournoi, idPartie } = useParams();
 
-    const [tournoi, settournoi] = useState(undefined as TOURNOI_T | undefined);
+    const [partie, setpartie] = useState(undefined as PARTIE_T | undefined);
 
-    const [statusList, setstatusList] = useState([] as STATUS_T[]);
-    const [partieToEdit, setpartieToEdit] = useState(undefined as PARTIE_T | undefined);
-
-    const loadStatus = useCallback(async () => {
-        const res = await getAllSatus();
+    const loadPartie = useCallback(async () => {
+        const res = await getPartie(idTournoi as string, idPartie as string);
         if (!res) return;
-        setstatusList(res);
-    }, []);
-
-    const loadTournoi = useCallback(async () => {
-        const res = await getTournoi(idTournoi as string);
-        if (!res) return;
-        settournoi(res);
+        setpartie(res);
     }, []);
 
     useEffect(() => {
-        loadTournoi();
-        loadStatus();
+        loadPartie();
     }, []);
 
-
-    if (!tournoi) {
+    if (!partie) {
         return;
     }
 
     return (
-        <SelectedTournoiContext.Provider value={{
-            tournoi,
-            settournoi,
-            statusList,
-            partieToEdit,
-            setpartieToEdit,
-            loadTournoi
+        <SelectedPartieContext.Provider value={{
+            partie
         }} >
             <Stack>
                 <Breadcrumbs separator=">" aria-label="breadcrumbs">
                     <Link to="/tournoi" style={{ textDecoration: 'none' }}>
                         <Typography level='h4'>Gestion des tournois</Typography>
                     </Link>
-                    <Typography level='title-md'>{tournoi.nom}</Typography>
+                    <Typography level='title-md'>...</Typography>
+                    <Typography level='title-md'>{partie.dateHeure}</Typography>
                 </Breadcrumbs>
 
                 <Divider sx={{ width: 100 }} />
@@ -103,8 +89,8 @@ const SelectedTournoi = () => {
                     </Tabs>
                 </Stack>
             </Stack>
-        </SelectedTournoiContext.Provider>
+        </SelectedPartieContext.Provider>
     )
 }
 
-export default SelectedTournoi
+export default SelectedPartie

@@ -3,6 +3,7 @@ import Dashboard from "../pages/Dashboard";
 import User from "../pages/User";
 import Tournoi from "../pages/Tournoi";
 import SelectedTournoi from "../pages/SelectedTournoi";
+import SelectedPartie from "../pages/SelectedPartie";
 
 export default [
     {
@@ -31,6 +32,14 @@ export default [
         href: '/tournoi-selectionne/:idTournoi',
         icon: faUserClock,
         component: SelectedTournoi,
+        isPublic: false,
+        toHide: true
+    },
+    {
+        label: 'Partie selectionnée',
+        href: '/partie-selectionne/:idTournoi/:idPartie',
+        icon: faUserClock,
+        component: SelectedPartie,
         isPublic: false,
         toHide: true
     },
