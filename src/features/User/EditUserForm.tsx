@@ -12,7 +12,7 @@ import { toast } from 'react-toastify';
 const EditUserForm = () => {
     const { roleList, setuserList, userToEdit, setuserToEdit } = useContext(UserContext);
 
-    const [isOpen, setisOpen] = useState(true);
+    const [isOpen, setisOpen] = useState(false);
     const [selectedRole, setselectedRole] = useState(userToEdit?.id_role || (roleList[0]?.id || null));
     const [loadingState, setloadingState] = useState(null as LOADING_STATE_T);
 
@@ -32,9 +32,16 @@ const EditUserForm = () => {
                 toast.error("Erreur lors de la création de l'utilisateur.");
                 return;
             }
-            
+
             toast.success("Utilisateur créé avec succès.");
-            setuserList(prev => [...prev, res]);
+            
+            setuserList(prev => {
+                if (userToEdit) {
+                    return prev.map(user => user.id === userToEdit.id ? { ...user, ...data } : user);
+                }
+                return [...prev, res];
+            });
+
             setisOpen(false);
 
         } catch (error) {
