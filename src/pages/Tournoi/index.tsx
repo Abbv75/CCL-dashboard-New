@@ -1,6 +1,6 @@
 import { faSearch } from '@fortawesome/free-solid-svg-icons'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import { Divider, Input, Stack, Typography } from '@mui/joy'
+import { Divider, Input, Option, Select, Stack, Typography } from '@mui/joy'
 import { useCallback, useEffect, useState } from 'react'
 import { STATUS_T, TOURNOI_T } from '../../types'
 import { getAllTournoi } from '../../service/tournoi'
@@ -8,10 +8,13 @@ import ListZone from '../../features/tournoi/ListZone'
 import { TournoiContext } from '../../providers/TournoiContext'
 import EditZone from '../../features/tournoi/EditZone'
 import { getAllSatus } from '../../service/status'
+
 const Tournoi = () => {
     const [tournoiList, settournoiList] = useState([] as TOURNOI_T[]);
     const [statusList, setstatusList] = useState([] as STATUS_T[]);
     const [tournoiToEdit, settournoiToEdit] = useState(undefined as TOURNOI_T | undefined);
+    const [search, setsearch] = useState(undefined as string | undefined);
+    const [statusSelected, setstatusSelected] = useState(null as string | null);
 
     const loadTournoi = useCallback(async () => {
         const res = await getAllTournoi();
@@ -25,6 +28,18 @@ const Tournoi = () => {
         setstatusList(res);
     }, []);
 
+    const filterData = useCallback(() => {
+        if (!tournoiList || tournoiList.length === 0) return [];
+        let filteredData = tournoiList;
+        if (search) {
+            filteredData = filteredData.filter(tournoi => tournoi.nom.toLowerCase().includes(search.toLowerCase()));
+        }
+        if (statusSelected) {
+            filteredData = filteredData.filter(tournoi => (tournoi.id_status as any) == statusSelected);
+        }
+        return filteredData;
+    }, [search, tournoiList, statusSelected]);
+
     useEffect(() => {
         loadStatus();
         loadTournoi();
@@ -33,7 +48,7 @@ const Tournoi = () => {
 
     return (
         <TournoiContext.Provider value={{
-            tournoiList,
+            tournoiList: filterData(),
             settournoiList,
             statusList,
             tournoiToEdit,
@@ -51,7 +66,21 @@ const Tournoi = () => {
                             <Input
                                 sx={{ width: 300 }}
                                 endDecorator={<FontAwesomeIcon icon={faSearch} />}
+                                placeholder='Rechercher un tournoi'
+                                value={search}
+                                onChange={({ target }) => setsearch(target.value)}
                             />
+
+                            <Select
+                                defaultValue={statusSelected}
+                                onChange={(e, value) => setstatusSelected(value)}
+                            >
+                                <Option value={null}>Tout</Option>
+
+                                {statusList && statusList.map((value, index) => (
+                                    <Option value={value.id}>{value.nom}</Option>
+                                ))}
+                            </Select>
                         </Stack>
 
                         <EditZone />
