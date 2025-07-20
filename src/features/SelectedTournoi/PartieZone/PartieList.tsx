@@ -1,7 +1,7 @@
-import { Stack, Typography } from '@mui/joy'
-import React, { useContext } from 'react'
-import PartieCard from '../../components/PartieCard'
-import { SelectedTournoiContext } from '../../providers/SelectedTournoiContext';
+import { Stack, Typography } from '@mui/joy';
+import { useContext } from 'react';
+import PartieCard from '../../../components/PartieCard';
+import { SelectedTournoiContext } from '../../../providers/SelectedTournoiContext';
 
 const PartieList = () => {
     const { tournoi } = useContext(SelectedTournoiContext);

@@ -2,18 +2,29 @@ import { faSearch } from '@fortawesome/free-solid-svg-icons'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { Breadcrumbs, Divider, Input, Stack, Tab, tabClasses, TabList, TabPanel, Tabs, Typography } from '@mui/joy'
 import { useCallback, useEffect, useState } from 'react'
-import { TOURNOI_T } from '../../types'
+import { PARTIE_T, STATUS_T, TOURNOI_T } from '../../types'
 import { getTournoi } from '../../service/tournoi'
 import { SelectedTournoiContext } from '../../providers/SelectedTournoiContext'
 import { Link, useParams } from 'react-router-dom'
 import ListZone from '../../features/SelectedTournoi/ListZone'
 import AddParticipantZone from '../../features/SelectedTournoi/AddParticipantZone'
-import PartieList from '../../features/SelectedTournoi/PartieList'
+import PartieList from '../../features/SelectedTournoi/PartieZone/PartieList'
+import EditPartieForm from '../../features/SelectedTournoi/PartieZone/EditPartieForm'
+import { getAllSatus } from '../../service/status'
 
 const SelectedTournoi = () => {
     const { idTournoi } = useParams();
 
     const [tournoi, settournoi] = useState(undefined as TOURNOI_T | undefined);
+
+    const [statusList, setstatusList] = useState([] as STATUS_T[]);
+    const [partieToEdit, setpartieToEdit] = useState(undefined as PARTIE_T | undefined);
+
+    const loadStatus = useCallback(async () => {
+        const res = await getAllSatus();
+        if (!res) return;
+        setstatusList(res);
+    }, []);
 
     const loadTournoi = useCallback(async () => {
         const res = await getTournoi(idTournoi as string);
@@ -23,7 +34,9 @@ const SelectedTournoi = () => {
 
     useEffect(() => {
         loadTournoi();
+        loadStatus();
     }, []);
+
 
     if (!tournoi) {
         return;
@@ -32,9 +45,12 @@ const SelectedTournoi = () => {
     return (
         <SelectedTournoiContext.Provider value={{
             tournoi,
-            settournoi
+            settournoi,
+            statusList,
+            partieToEdit,
+            setpartieToEdit,
+            loadTournoi
         }} >
-
             <Stack>
                 <Breadcrumbs separator=">" aria-label="breadcrumbs">
                     <Link to="/tournoi" style={{ textDecoration: 'none' }}>
@@ -75,25 +91,15 @@ const SelectedTournoi = () => {
                             value={0}
                             sx={{ px: 0, gap: 2, display: 'flex', flexDirection: 'column', }}
                         >
-                            <Stack direction={"row"} gap={1} >
-                                <Input
-                                    sx={{ width: 300 }}
-                                    endDecorator={<FontAwesomeIcon icon={faSearch} />}
-                                />
-                                <AddParticipantZone />
-                            </Stack>
+                            <AddParticipantZone />
                             <ListZone />
                         </TabPanel>
+
                         <TabPanel
                             value={1}
                             sx={{ px: 0, gap: 2, display: 'flex', flexDirection: 'column', }}
                         >
-                            <Stack direction={"row"} gap={1} >
-                                <Input
-                                    sx={{ width: 300 }}
-                                    endDecorator={<FontAwesomeIcon icon={faSearch} />}
-                                />
-                            </Stack>
+                            <EditPartieForm />
                             <PartieList />
                         </TabPanel>
                     </Tabs>
