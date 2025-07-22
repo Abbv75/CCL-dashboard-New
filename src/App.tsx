@@ -1,13 +1,10 @@
-import { BrowserRouter, Route, Routes } from 'react-router-dom'
+import { BrowserRouter } from 'react-router-dom'
 import Router from './Routes'
 import { AppContext } from './providers/AppContext'
 import { ToastContainer } from 'react-toastify'
-import React, { useCallback, useEffect, useState } from 'react'
+import { useCallback, useEffect, useState } from 'react'
 import { LOADING_STATE_T, USER_T } from './types'
-import { Skeleton, Typography } from '@mui/joy'
-import Layout from './components/Layout'
-import Dashboard from './pages/Dashboard'
-import Connexion from './pages/Connexion'
+import { Skeleton } from '@mui/joy'
 
 const App = () => {
   const [currentUser, setcurrentUser] = useState(undefined as undefined | USER_T);
