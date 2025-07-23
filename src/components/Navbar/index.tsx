@@ -2,14 +2,16 @@ import { Avatar, Button, Card, Divider, Stack, Typography } from '@mui/joy'
 import { Link, useLocation } from 'react-router-dom'
 import { PAGE_PATH } from '../../constant'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import { faArrowLeft, faLock } from '@fortawesome/free-solid-svg-icons'
-import { useContext } from 'react'
+import { faArrowLeft, faArrowRight, faLock } from '@fortawesome/free-solid-svg-icons'
+import { useContext, useState } from 'react'
 import { AppContext } from '../../providers/AppContext'
 
 const Navbar = () => {
-    const {setcurrentUser} = useContext(AppContext);
+    const { setcurrentUser } = useContext(AppContext);
 
     const { pathname } = useLocation();
+
+    const [show, setshow] = useState(true);
 
     return (
         <Card sx={{
@@ -18,16 +20,22 @@ const Navbar = () => {
             p: 1,
             minWidth: 200,
             justifyContent: "space-between",
+            alignItems: show ? 'flex-start' : 'center'
 
         }} >
             <Stack gap={1} >
 
-                <Avatar color='primary' sx={{ alignSelf: "flex-end" }} children={<FontAwesomeIcon icon={faArrowLeft} />} />
+                <Avatar
+                    color='primary'
+                    sx={{ alignSelf: "flex-end" }}
+                    children={<FontAwesomeIcon icon={show ? faArrowLeft : faArrowRight} />}
+                    onClick={() => setshow(!show)}
+                />
 
                 {PAGE_PATH.filter(({ toHide }) => !toHide).map((value, index) => (
                     <>
                         <Link key={index} to={value.href}>
-                            <Typography color={pathname == value.href ? 'primary' : 'neutral'} startDecorator={<FontAwesomeIcon icon={value.icon} />} >{value.label}</Typography>
+                            <Typography color={pathname == value.href ? 'primary' : 'neutral'} startDecorator={<FontAwesomeIcon icon={value.icon} />} >{show && value.label}</Typography>
                         </Link>
                         <Divider sx={{ width: 50 }} />
                     </>
@@ -37,11 +45,11 @@ const Navbar = () => {
             <Button
                 color='danger'
                 endDecorator={<FontAwesomeIcon icon={faLock} />}
-                onClick={()=>{
+                onClick={() => {
                     setcurrentUser(undefined);
                     localStorage.removeItem('currentUser');
                 }}
-            >Deconnexion</Button>
+            >{show && 'Deconnexion'} </Button>
         </Card>
 
     )
