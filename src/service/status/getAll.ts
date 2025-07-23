@@ -1,5 +1,5 @@
 import { axiosInstance } from "../../constant";
-import { ROLE_T, STATUS_T } from "../../types";
+import { STATUS_T } from "../../types";
 
 export default async () => {
     try {

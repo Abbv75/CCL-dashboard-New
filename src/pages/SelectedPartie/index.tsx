@@ -44,7 +44,7 @@ const SelectedPartie = () => {
             <Stack>
                 <Breadcrumbs separator=">" aria-label="breadcrumbs">
                     <Link to="/tournoi" style={{ textDecoration: 'none' }}>
-                        <Typography level='h4'>Gestion des tournois</Typography>
+                        <Typography level='h4'>Gestion des tournois.</Typography>
                     </Link>
                     <Link to={`/tournoi-selectionne/${idTournoi}`} style={{ textDecoration: 'none' }}>
                         <Typography level='title-md'>...</Typography>

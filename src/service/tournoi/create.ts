@@ -1,5 +1,5 @@
 import { axiosInstance } from "../../constant";
-import { TOURNOI_T, USER_T } from "../../types";
+import { TOURNOI_T } from "../../types";
 
 export const create = async (tournoi: {
     nom: string,
