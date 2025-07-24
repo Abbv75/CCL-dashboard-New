@@ -61,10 +61,10 @@ const Tournoi = () => {
                 <Divider sx={{ width: 100 }} />
 
                 <Stack mt={5} gap={5} >
-                    <Stack direction={"row"} gap={2} justifyContent={"space-between"} alignItems={"center"} >
+                    <Stack direction={"row"} flexWrap={'wrap'} gap={2} justifyContent={"space-between"} alignItems={"center"} >
                         <Stack direction={"row"} gap={1} >
                             <Input
-                                sx={{ width: 300 }}
+                                sx={{ width: 180 }}
                                 endDecorator={<FontAwesomeIcon icon={faSearch} />}
                                 placeholder='Rechercher un tournoi'
                                 value={search}

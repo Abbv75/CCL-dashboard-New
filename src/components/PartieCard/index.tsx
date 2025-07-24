@@ -52,7 +52,7 @@ const PartieCard = ({ partie }: { partie: PARTIE_T }) => {
                     </Stack>
                 </Stack>
             </Stack>
-            <ButtonGroup>
+            <ButtonGroup size='sm' >
                 <Button
                     fullWidth
                     color='primary'

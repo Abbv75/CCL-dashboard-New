@@ -1,4 +1,4 @@
-import { Avatar, Button, Card, Divider, Stack, Typography } from '@mui/joy'
+import { Avatar, Button, Card, Divider, IconButton, Stack, Typography } from '@mui/joy'
 import { Link, useLocation } from 'react-router-dom'
 import { PAGE_PATH } from '../../constant'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
@@ -18,12 +18,11 @@ const Navbar = () => {
             borderRadius: 0,
             borderTop: 0,
             p: 1,
-            minWidth: 200,
+            // minWidth: 200,
             justifyContent: "space-between",
             alignItems: show ? 'flex-start' : 'center'
-
         }} >
-            <Stack gap={1} >
+            <Stack gap={1} alignItems={show ? 'flex-start' : 'center'} >
 
                 <Avatar
                     color='primary'
@@ -34,22 +33,29 @@ const Navbar = () => {
 
                 {PAGE_PATH.filter(({ toHide }) => !toHide).map((value, index) => (
                     <>
-                        <Link key={index} to={value.href}>
-                            <Typography color={pathname == value.href ? 'primary' : 'neutral'} startDecorator={<FontAwesomeIcon icon={value.icon} />} >{show && value.label}</Typography>
+                        <Link key={index} to={value.href} style={{ display: 'flex', alignItems: 'center' }}>
+                            <IconButton><FontAwesomeIcon icon={value.icon} /></IconButton>
+                            {show && (
+                                <Typography color={pathname == value.href ? 'primary' : 'neutral'} >{value.label}</Typography>
+                            )}
                         </Link>
-                        <Divider sx={{ width: 50 }} />
+                        <Divider sx={{ width: 40 }} />
                     </>
                 ))}
             </Stack>
 
             <Button
                 color='danger'
-                endDecorator={<FontAwesomeIcon icon={faLock} />}
                 onClick={() => {
                     setcurrentUser(undefined);
                     localStorage.removeItem('currentUser');
                 }}
-            >{show && 'Deconnexion'} </Button>
+                fullWidth
+                sx={{ gap: 1 }}
+            >
+                {show && 'Deconnexion'}
+                <FontAwesomeIcon icon={faLock} />
+            </Button>
         </Card>
 
     )

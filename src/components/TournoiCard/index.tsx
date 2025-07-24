@@ -38,7 +38,7 @@ const TournoiCard = ({ tournoi }: { tournoi: TOURNOI_T }) => {
     }
 
     return (
-        <Card sx={{ p: 1 }} >
+        <Card sx={{ p: 1, }} >
             <Stack direction='row' gap={2} justifyContent='space-between' alignItems='center' >
                 <Typography level='title-sm'>{tournoi.nom}</Typography>
                 {tournoi.status && (
@@ -76,7 +76,7 @@ const TournoiCard = ({ tournoi }: { tournoi: TOURNOI_T }) => {
 
             <Divider />
 
-            <ButtonGroup>
+            <ButtonGroup size='sm' >
                 <Button
                     fullWidth
                     color='primary'

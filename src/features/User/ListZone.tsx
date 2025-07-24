@@ -1,7 +1,7 @@
 import { useContext } from 'react'
 import CustomTable from '../../components/CustomTable'
 import { UserContext } from '../../providers/UserContext'
-import { ButtonGroup, IconButton, LinearProgress, Tooltip } from '@mui/joy';
+import { ButtonGroup, IconButton, LinearProgress, Sheet, Stack, Tooltip } from '@mui/joy';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faEnvelopeOpen, faFeather, faKey, faPhoneAlt, faTrashArrowUp } from '@fortawesome/free-solid-svg-icons';
 import { faWhatsapp } from '@fortawesome/free-brands-svg-icons';
@@ -21,7 +21,7 @@ const ListZone = () => {
                 return;
             }
             toast.success("Utilisateur supprimé avec succès");
-            
+
             setuserList(prev => prev.filter(user => user.id !== id));
         } catch (error) {
             console.error("Error deleting user:", error);
@@ -40,35 +40,37 @@ const ListZone = () => {
                 value.idCOD,
                 value.nomComplet,
                 (
-                    <ButtonGroup size='sm' key={index} >
-                        <Tooltip title={value.contact?.telephone} >
-                            <IconButton
-                                component="a"
-                                href={`tel:${value.contact?.telephone}`}
-                                children={<FontAwesomeIcon icon={faPhoneAlt} />}
-                            />
-                        </Tooltip>
-                        {value.contact?.email && (
-                            <Tooltip title={value.contact?.email} >
+                    <Sheet>
+                        <ButtonGroup size='sm' key={index} >
+                            <Tooltip title={value.contact?.telephone} >
                                 <IconButton
                                     component="a"
-                                    href={`mailto:${value.contact?.email}`}
-                                    children={<FontAwesomeIcon icon={faEnvelopeOpen} />}
+                                    href={`tel:${value.contact?.telephone}`}
+                                    children={<FontAwesomeIcon icon={faPhoneAlt} />}
                                 />
                             </Tooltip>
-                        )}
-                        {value.contact?.whatsapp && (
-                            <Tooltip title={value.contact?.whatsapp} >
-                                <IconButton
-                                    variant='solid'
-                                    color="success"
-                                    component="a"
-                                    href={`https://whame.com/${value.contact?.whatsapp}`}
-                                    children={<FontAwesomeIcon icon={faWhatsapp} />}
-                                />
-                            </Tooltip>
-                        )}
-                    </ButtonGroup>
+                            {value.contact?.email && (
+                                <Tooltip title={value.contact?.email} >
+                                    <IconButton
+                                        component="a"
+                                        href={`mailto:${value.contact?.email}`}
+                                        children={<FontAwesomeIcon icon={faEnvelopeOpen} />}
+                                    />
+                                </Tooltip>
+                            )}
+                            {value.contact?.whatsapp && (
+                                <Tooltip title={value.contact?.whatsapp} >
+                                    <IconButton
+                                        variant='solid'
+                                        color="success"
+                                        component="a"
+                                        href={`https://whame.com/${value.contact?.whatsapp}`}
+                                        children={<FontAwesomeIcon icon={faWhatsapp} />}
+                                    />
+                                </Tooltip>
+                            )}
+                        </ButtonGroup>
+                    </Sheet>
                 ),
                 (
                     <ButtonGroup>
