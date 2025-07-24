@@ -90,17 +90,12 @@ const AddParticipantZone = () => {
                         component={Card}
                         variant='outlined'
                     >
-                        <Checkbox 
-                        label='Tout selectionner'
-                        onClick={() => {
-                            if (selectedId.length === userList.length) {
-                                setselectedId([]);
-                            } else {
-                                setselectedId(userList.map(user => user.id));
-                            }
-                        }}
-                         />
-
+                        <Checkbox
+                            label='Tout selectionner'
+                            onClick={() => {
+                                setselectedId(selectedId.length === userList.length ? [] : userList.map(user => user.id));
+                            }}
+                        />
                     </Sheet>
 
                     <RadioGroup variant='soft' sx={{ p: 1, maxHeight: 500, overflowY: "scroll" }} >

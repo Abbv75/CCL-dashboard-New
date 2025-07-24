@@ -1,6 +1,6 @@
 import { faCheck, faUserPlus } from '@fortawesome/free-solid-svg-icons'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import { Button, Input, Modal, ModalClose, ModalDialog, Radio, RadioGroup, Stack, Typography } from '@mui/joy'
+import { Button, Card, Checkbox, Input, Modal, ModalClose, ModalDialog, Radio, RadioGroup, Sheet, Stack, Typography } from '@mui/joy'
 import { useCallback, useContext, useEffect, useState } from 'react'
 import { LOADING_STATE_T, USER_T } from '../../types'
 import { toast } from 'react-toastify'
@@ -83,6 +83,18 @@ const AddParticipantZone = () => {
                     <ModalClose />
 
                     <Input placeholder='rechercher par ID COD' />
+
+                    <Sheet
+                        component={Card}
+                        variant='outlined'
+                    >
+                        <Checkbox
+                            label='Tout selectionner'
+                            onClick={() => {
+                                setselectedId(selectedId.length === userList.length ? [] : userList.map(user => user.id));
+                            }}
+                        />
+                    </Sheet>
 
                     <RadioGroup variant='soft' sx={{ p: 1, maxHeight: 500, overflowY: "scroll" }} >
                         {userList.filter(({ role, id }) => role?.id == 'R01' && (tournoi.participants || []).every(participant => participant.id !== id))
