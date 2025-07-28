@@ -39,7 +39,8 @@ const SelectedPartie = () => {
         <SelectedPartieContext.Provider value={{
             partie,
             tournoi,
-            loadPartie
+            loadPartie,
+            loadTournoi,
         }} >
             <Stack>
                 <Breadcrumbs separator=">" aria-label="breadcrumbs">

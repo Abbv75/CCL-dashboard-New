@@ -1,17 +1,15 @@
 import { faCheck, faUserPlus } from '@fortawesome/free-solid-svg-icons'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { Button, Card, Checkbox, Input, Modal, ModalClose, ModalDialog, Radio, RadioGroup, Sheet, Stack, Typography } from '@mui/joy'
-import { useCallback, useContext, useEffect, useState } from 'react'
-import { LOADING_STATE_T, USER_T } from '../../types'
+import { useContext, useMemo, useState } from 'react'
+import { LOADING_STATE_T } from '../../types'
 import { toast } from 'react-toastify'
-import { getAllUser } from '../../service/user'
 import { SelectedPartieContext } from '../../providers/SelectedPartieContext'
 import { addParticipantsToPartie } from '../../service/partie'
 
 const AddParticipantZone = () => {
-    const { tournoi, partie, loadPartie } = useContext(SelectedPartieContext);
+    const { tournoi, partie, loadPartie, loadTournoi } = useContext(SelectedPartieContext);
 
-    const [userList, setuserList] = useState([] as USER_T[]);
     const [selectedId, setselectedId] = useState([] as string[]);
     const [loadingSate, setloadingSate] = useState(null as LOADING_STATE_T);
     const [isOpen, setisOpen] = useState(false);
@@ -36,6 +34,7 @@ const AddParticipantZone = () => {
             };
 
             loadPartie();
+            loadTournoi();
 
             toast.success("Participants ajoutés avec succès.");
 
@@ -50,21 +49,12 @@ const AddParticipantZone = () => {
         }
     };
 
-    const loadUserList = useCallback(async () => {
-        const res = await getAllUser();
+    const userList = useMemo(() => (tournoi?.participants || []), [partie]);
 
-        if (!res) {
-            toast.error("Erreur lors du chargement des utilisateurs.");
-            return;
-        }
+    const playerToShow = useMemo(() => userList.filter(
+        ({ id }) => (partie?.participants || [])?.every(participant => participant.id != id)
+    ), [userList, tournoi?.participants])
 
-        setuserList(res);
-    }, []);
-
-
-    useEffect(() => {
-        loadUserList();
-    }, [loadUserList]);
 
     if (!tournoi) {
         return <></>;
@@ -91,24 +81,23 @@ const AddParticipantZone = () => {
                         <Checkbox
                             label='Tout selectionner'
                             onClick={() => {
-                                setselectedId(selectedId.length === userList.length ? [] : userList.map(user => user.id));
+                                setselectedId(selectedId.length === userList.length ? [] : playerToShow.map(({ id }) => id));
                             }}
                         />
                     </Sheet>
 
                     <RadioGroup variant='soft' sx={{ p: 1, maxHeight: 500, overflowY: "scroll" }} >
-                        {userList.filter(({ role, id }) => role?.id == 'R01' && (tournoi.participants || []).every(participant => participant.id !== id))
-                            .map((user, index) => (
-                                <Radio
-                                    key={index}
-                                    value={user.id}
-                                    label={user.nomComplet}
-                                    checked={selectedId.includes(user.id as string)}
-                                    onClick={() => {
-                                        toogleInList(user.id as string);
-                                    }}
-                                />
-                            ))}
+                        {playerToShow.map((user, index) => (
+                            <Radio
+                                key={index}
+                                value={user.id}
+                                label={user.nomComplet}
+                                checked={selectedId.includes(user.id as string)}
+                                onClick={() => {
+                                    toogleInList(user.id as string);
+                                }}
+                            />
+                        ))}
                     </RadioGroup>
 
                     <Button
