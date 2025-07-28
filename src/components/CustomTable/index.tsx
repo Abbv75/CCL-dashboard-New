@@ -23,6 +23,7 @@ const CustomTable = ({ theadCells, data }: { theadCells: string[], data: any[][]
                 alignItems={'center'}
                 component={Card}
                 p={0.5}
+                px={1}
             >
                 <Collapse in={showSearchBar} orientation='horizontal' >
                     <Input
@@ -32,9 +33,11 @@ const CustomTable = ({ theadCells, data }: { theadCells: string[], data: any[][]
                         endDecorator={<FontAwesomeIcon
                             icon={faTimesCircle}
                             color='red'
-                            onClick={() => setsearch('')}
+                            onClick={() => {setsearch(''); setshowSearchBar(false)}}
                             style={{ cursor: 'pointer' }}
                         />}
+                        sx={{ maxWidth: window.innerWidth < 700 ? 250 : 'initial' }}
+                        onBlur={() => (!search || search =='') && setshowSearchBar(false)}
                     />
                 </Collapse>
 

@@ -75,18 +75,9 @@ const User = () => {
 
                 <Divider sx={{ width: 100 }} />
 
-                <Stack mt={3} >
+                <Stack mt={3} gap={1} >
                     <Stack direction={"row"} gap={1} flexWrap={'wrap'} justifyContent={"space-between"} alignItems={"center"} >
                         <Stack direction={"row"} gap={1} >
-                            <Input
-                                sx={{ width: 180 }}
-                                endDecorator={<FontAwesomeIcon icon={faSearch} />}
-                                placeholder="ID, nom, login, tel ou email"
-                                value={searchValue}
-                                onChange={({ target }) => setsearchValue(target.value)}
-                                fullWidth
-                            />
-
                             <Select
                                 defaultValue={selectedRole}
                                 onChange={(e, value) => setselectedRole(value)}
