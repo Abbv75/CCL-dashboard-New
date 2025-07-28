@@ -1,6 +1,4 @@
-import { faSearch } from '@fortawesome/free-solid-svg-icons'
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import { Divider, Input, Option, Select, Stack, Typography } from '@mui/joy'
+import { Divider, Option, Select, Stack, Typography } from '@mui/joy'
 import { useCallback, useEffect, useMemo, useState } from 'react'
 import { LOADING_STATE_T, ROLE_T, USER_T } from '../../types'
 import { getAllRole } from '../../service/role'
