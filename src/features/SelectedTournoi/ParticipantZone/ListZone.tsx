@@ -21,7 +21,7 @@ const ListZone = () => {
             const res = await removeParticipants(tournoi.id, [id]);
             if (!res) return;
 
-            setuserList(userList.filter(user => user.idCOD !== id));
+            setuserList(userList.filter(user => user.id !== id));
             toast.success("Participant supprimé avec succès.");
         } catch (error) {
             console.error("Error removing participant:", error);
