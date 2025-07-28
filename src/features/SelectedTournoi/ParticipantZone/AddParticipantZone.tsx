@@ -1,7 +1,7 @@
 import { faCheck, faUserPlus } from '@fortawesome/free-solid-svg-icons'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { Button, Card, Checkbox, Input, Modal, ModalClose, ModalDialog, Radio, RadioGroup, Sheet, Stack, Typography } from '@mui/joy'
-import { useCallback, useContext, useEffect, useState } from 'react'
+import { useCallback, useContext, useEffect, useMemo, useState } from 'react'
 import { SelectedTournoiContext } from '../../../providers/SelectedTournoiContext'
 import { LOADING_STATE_T, USER_T } from '../../../types'
 import { addParticipants } from '../../../service/tournoi'
@@ -9,7 +9,7 @@ import { toast } from 'react-toastify'
 import { getAllUser } from '../../../service/user'
 
 const AddParticipantZone = () => {
-    const { tournoi, settournoi } = useContext(SelectedTournoiContext);
+    const { tournoi, loadTournoi } = useContext(SelectedTournoiContext);
 
     const [userList, setuserList] = useState([] as USER_T[]);
     const [selectedId, setselectedId] = useState([] as string[]);
@@ -36,10 +36,7 @@ const AddParticipantZone = () => {
             };
 
             toast.success("Participants ajoutés avec succès.");
-            settournoi({
-                ...tournoi,
-                participants: [...(tournoi.participants || []), ...(res?.participants || [])]
-            });
+            loadTournoi();
 
             setselectedId([]);
 
@@ -63,10 +60,14 @@ const AddParticipantZone = () => {
         setuserList(res);
     }, []);
 
+    const playerToShow = useMemo(() => userList.filter(
+        ({ role, id }) => role?.id == 'R01' && (tournoi?.participants || [])?.every(participant => participant.id != id)
+    ), [userList, tournoi?.participants])
+
 
     useEffect(() => {
         loadUserList();
-    }, [loadUserList]);
+    }, []);
 
     if (!tournoi) {
         return <></>;
@@ -93,24 +94,23 @@ const AddParticipantZone = () => {
                         <Checkbox
                             label='Tout selectionner'
                             onClick={() => {
-                                setselectedId(selectedId.length === userList.length ? [] : userList.map(user => user.id));
+                                setselectedId(selectedId.length === userList.length ? [] : playerToShow.map(({id}) => id));
                             }}
                         />
                     </Sheet>
 
                     <RadioGroup variant='soft' sx={{ p: 1, maxHeight: 500, overflowY: "scroll" }} >
-                        {userList.filter(({ role, id }) => role?.id == 'R01' && (tournoi.participants || []).every(participant => participant.id !== id))
-                            .map((user, index) => (
-                                <Radio
-                                    key={index}
-                                    value={user.id}
-                                    label={user.nomComplet}
-                                    checked={selectedId.includes(user.id as string)}
-                                    onClick={() => {
-                                        toogleInList(user.id as string);
-                                    }}
-                                />
-                            ))}
+                        {playerToShow.map((user, index) => (
+                            <Radio
+                                key={index}
+                                value={user.id}
+                                label={user.nomComplet}
+                                checked={selectedId.includes(user.id as string)}
+                                onClick={() => {
+                                    toogleInList(user.id as string);
+                                }}
+                            />
+                        ))}
                     </RadioGroup>
 
                     <Button
