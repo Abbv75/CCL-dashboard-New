@@ -64,14 +64,14 @@ const TournoiCard = ({ tournoi }: { tournoi: TOURNOI_T }) => {
                     fontWeight={700}
                     startDecorator={<FontAwesomeIcon icon={faHandHoldingDollar} />}
                 >Inscription:</Typography>
-                <Typography >{tournoi.frais_inscription?.toLocaleString()} FCFA</Typography>
+                <Typography >{Math.floor(tournoi.frais_inscription || 0)?.toLocaleString()} FCFA</Typography>
             </Stack>
             <Stack direction='row' gap={1} >
                 <Typography
                     fontWeight={700}
                     startDecorator={<FontAwesomeIcon icon={faMoneyCheck} />}
                 >Cash Prise:</Typography>
-                <Typography >{tournoi.montant_a_gagner?.toLocaleString()} FCFA</Typography>
+                <Typography >{Math.floor(tournoi.montant_a_gagner || 0)?.toLocaleString()} FCFA</Typography>
             </Stack>
 
             <Divider />
