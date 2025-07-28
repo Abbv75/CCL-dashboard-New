@@ -70,12 +70,12 @@ const User = () => {
             userPasswordToEdit,
             setuserPasswordToEdit
         }} >
-            <Stack width={"100%"} >
+            <Stack>
                 <Typography level='h2'>Gestion des utilisateurs</Typography>
 
                 <Divider sx={{ width: 100 }} />
 
-                <Stack mt={5} >
+                <Stack mt={3} >
                     <Stack direction={"row"} gap={1} flexWrap={'wrap'} justifyContent={"space-between"} alignItems={"center"} >
                         <Stack direction={"row"} gap={1} >
                             <Input

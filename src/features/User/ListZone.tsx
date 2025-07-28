@@ -40,37 +40,35 @@ const ListZone = () => {
                 value.idCOD,
                 value.nomComplet,
                 (
-                    <Sheet>
-                        <ButtonGroup size='sm' key={index} >
-                            <Tooltip title={value.contact?.telephone} >
+                    <ButtonGroup size='sm' key={index} >
+                        <Tooltip title={value.contact?.telephone} >
+                            <IconButton
+                                component="a"
+                                href={`tel:${value.contact?.telephone}`}
+                                children={<FontAwesomeIcon icon={faPhoneAlt} />}
+                            />
+                        </Tooltip>
+                        {value.contact?.email && (
+                            <Tooltip title={value.contact?.email} >
                                 <IconButton
                                     component="a"
-                                    href={`tel:${value.contact?.telephone}`}
-                                    children={<FontAwesomeIcon icon={faPhoneAlt} />}
+                                    href={`mailto:${value.contact?.email}`}
+                                    children={<FontAwesomeIcon icon={faEnvelopeOpen} />}
                                 />
                             </Tooltip>
-                            {value.contact?.email && (
-                                <Tooltip title={value.contact?.email} >
-                                    <IconButton
-                                        component="a"
-                                        href={`mailto:${value.contact?.email}`}
-                                        children={<FontAwesomeIcon icon={faEnvelopeOpen} />}
-                                    />
-                                </Tooltip>
-                            )}
-                            {value.contact?.whatsapp && (
-                                <Tooltip title={value.contact?.whatsapp} >
-                                    <IconButton
-                                        variant='solid'
-                                        color="success"
-                                        component="a"
-                                        href={`https://whame.com/${value.contact?.whatsapp}`}
-                                        children={<FontAwesomeIcon icon={faWhatsapp} />}
-                                    />
-                                </Tooltip>
-                            )}
-                        </ButtonGroup>
-                    </Sheet>
+                        )}
+                        {value.contact?.whatsapp && (
+                            <Tooltip title={value.contact?.whatsapp} >
+                                <IconButton
+                                    variant='solid'
+                                    color="success"
+                                    component="a"
+                                    href={`https://whame.com/${value.contact?.whatsapp}`}
+                                    children={<FontAwesomeIcon icon={faWhatsapp} />}
+                                />
+                            </Tooltip>
+                        )}
+                    </ButtonGroup>
                 ),
                 (
                     <ButtonGroup>

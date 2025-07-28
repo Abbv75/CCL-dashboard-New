@@ -6,9 +6,16 @@ const Layout = ({ children }: { children?: any }) => {
     return (
         <Stack height={"100vh"} maxWidth={'100vw'} >
             <Header />
-            <Stack direction={"row"} maxHeight={'calc(100% - 60px)'} flex={1} >
+            <Stack direction={"row"} maxHeight={'calc(100% - 57px)'} flex={1} >
                 <Navbar />
-                <Stack p={1} flex={1} maxHeight={'100%'} sx={{overflowY : 'scroll', }} children={children} />
+                <Stack
+                    p={1}
+                    flex={1}
+                    maxHeight={'100%'}
+                    overflow={'auto'}
+                    children={children}
+                    width={'calc(100% - 80px)'}
+                />
             </Stack>
         </Stack>
     )
